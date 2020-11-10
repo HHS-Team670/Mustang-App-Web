@@ -1,5 +1,5 @@
 # Mustang-App
-Submission for scouting hackathon - Beach Blitz 2020
+Scouting app
 
 ## Contents
 
