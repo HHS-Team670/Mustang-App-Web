@@ -24,7 +24,8 @@ dependencies:
   flutter_speed_dial:
   flutter_colorpicker:
   cloud_firestore:
-    
+  path_provider:
+
   flutter:
     sdk: flutter
 
@@ -52,7 +53,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - data.csv
+    - map.png
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

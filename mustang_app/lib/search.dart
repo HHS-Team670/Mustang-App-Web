@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mustang_app/bottomnavbar.dart';
-import 'package:mustang_app/databaseoperations.dart';
 import 'package:mustang_app/header.dart';
-import 'package:mustang_app/teaminfodisplay.dart';
+import 'datareader.dart';
+import 'mapscouter.dart';
+import 'bottomnavbar.dart';
+import 'teaminfodisplay.dart';
 
 class SearchPage extends StatefulWidget {
   static const String route = './Search';
@@ -13,51 +13,32 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  List<String> teams = [];
   var tempSearchStore = [];
-  var allTeams = [];
   TextEditingController _queryController = new TextEditingController();
 
   _SearchPageState() {
-    initAllTeams().then((onValue) {
-      setState(() {});
-    });
-  }
-
-  Future<void> initAllTeams() async {
-    var docs = await Firestore.instance.collection('teams').getDocuments();
-    docs.documents.forEach((f) {
-      allTeams.add(f.documentID);
-    });
-    tempSearchStore = allTeams;
-  }
-
-  Future<QuerySnapshot> searchByName(String searchField) async {
-    if (searchField.isEmpty) return null;
-
-    var docs = await Firestore.instance
-        .collection('teams')
-        .where('Team Number', isEqualTo: searchField)
-        .getDocuments();
-    return docs;
+    teams = DataReader.teams;
+    tempSearchStore = DataReader.teams;
   }
 
   initiateSearch(value) async {
     if (value.length == 0) {
       setState(() {
-        tempSearchStore = allTeams;
+        tempSearchStore = teams;
       });
       return;
     }
 
-    tempSearchStore = [];
-    allTeams.forEach((element) {
+    var temp = [];
+    teams.forEach((element) {
       if (element.startsWith(value)) {
-        setState(() {
-          tempSearchStore.add(element);
-        });
+        temp.add(element);
       }
     });
-    setState((){});
+    setState(() {
+      tempSearchStore = temp;
+    });
   }
 
   @override
@@ -98,14 +79,14 @@ class _SearchPageState extends State<SearchPage> {
               itemCount: tempSearchStore.length,
               itemBuilder: (context, index) => ListTile(
                 onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TeamInfoDisplay(
-                      tempSearchStore[index]
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          TeamInfoDisplay(tempSearchStore[index]),
                     ),
-                  ),
-                );                },
+                  );
+                },
                 leading: Icon(Icons.people),
                 title: RichText(
                   text: TextSpan(
