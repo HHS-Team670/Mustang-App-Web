@@ -1,12 +1,17 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class DataReader {
   static String _data = "";
   static Map<String, dynamic> _averages = {};
   static Map<String, Map<String, dynamic>> _teamAverages = {};
   static List<String> _teams = [];
+  static Firestore db = Firestore.instance;
 
   DataReader() {
     _averages = {};
@@ -118,6 +123,7 @@ class DataReader {
       "Left of Goal": 0,
       "Inline with Goal": 0,
       "Inline with Alliance Trench": 0,
+      'n/a': 0,
     };
 
     List<String> lines = _data.split('\n');
@@ -149,6 +155,7 @@ class DataReader {
       "Goal Zone": 0,
       "Goal Side Middle": 0,
       "HP Side Middle": 0,
+      'n/a': 0,
     };
 
     List<String> lines = _data.split('\n');
@@ -253,4 +260,43 @@ class DataReader {
   static Future<void> _readData() async {
     _data = await rootBundle.loadString("assets/data.csv");
   }
+
+  static String convertField(String original) {
+    List<String> words = original.split(' ');
+    String firstWord = words.removeAt(0);
+    return firstWord.toLowerCase() + words.join('');
+  }
+
+  static Map<String, dynamic> convertMap(Map<String, dynamic> data) {
+    Map<String, dynamic> map =
+        data.map((key, value) => MapEntry(convertField(key), value));
+    return map;
+  }
+
+  static Future<StorageTaskSnapshot> exportDB() async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final File file = File('${directory.path}/db.json');
+
+    Map<String, Map<String, dynamic>> data = {};
+    final Firestore db = Firestore.instance;
+    var ref = FirebaseStorage.instance.ref().child('db.json');
+    QuerySnapshot teams = await db.collection('teams').getDocuments();
+    teams.documents.forEach((doc) async {
+      data[doc.documentID] = {};
+      data[doc.documentID]['Match Scouting'] =
+          new Map<String, Map<String, dynamic>>();
+      data[doc.documentID].addAll(doc.data);
+      QuerySnapshot matches =
+          await doc.reference.collection('Match Scouting').getDocuments();
+      matches.documents.forEach((match) {
+        data[doc.documentID]['Match Scouting'][match.documentID] = match.data;
+      });
+    });
+
+    File updated = await file.writeAsString(jsonEncode(data));
+    // File updated = await file.writeAsString("hello");
+    return ref.putFile(updated).onComplete;
+  }
+
+  static Future<void> importDB() async {}
 }

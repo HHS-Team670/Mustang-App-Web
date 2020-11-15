@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseOperations {
   Firestore db;
-  List<String> teamNames = new List<String>();
+  List<String> teamnames = new List<String>();
 
   DatabaseOperations() {
     // DBRef = FirebaseDatabase.instance.reference();
@@ -10,24 +10,18 @@ class DatabaseOperations {
   }
 
   void startPitScouting(String teamNumber, String names) {
-    db.collection('teams').document('Team Number: ' + teamNumber).setData({
-      'Pit Scouting': {
-        'Drivebase Type': "",
-        'Inner Port': false,
-        'Outer Port': false,
-        'Bottom Port': false,
-        'Rotation Control': false,
-        'Position Control': false,
-        'Climber': false,
-        'Leveller': false,
-        'Notes': "",
-      },
-      'Names': names,
+    db.collection('teams').document(teamNumber).setData({
+      'driveBaseType': "",
+      'innerPort': false,
+      'outerPort': false,
+      'bottomPort': false,
+      'rotationControl': false,
+      'positionControl': false,
+      'climber': false,
+      'leveller': false,
+      'notes': "",
+      'names': names,
     }, merge: true);
-    db
-        .collection('teams')
-        .document('Team Number: ' + teamNumber)
-        .updateData({'Team Number': teamNumber});
   }
 
   void updatePitScouting(String teamNumber,
@@ -40,93 +34,80 @@ class DatabaseOperations {
       leveller,
       String notes,
       drivebaseType}) {
-    db.collection('teams').document('Team Number: ' + teamNumber).updateData({
-      'Pit Scouting': {
-        'Drivebase Type': drivebaseType,
-        'Inner Port': inner,
-        'Outer Port': outer,
-        'Bottom Port': bottom,
-        'Rotation Control': rotation,
-        'Position Control': position,
-        'Climber': climb,
-        'Leveller': leveller,
-        'Notes': notes
-      }
+    db.collection('teams').document(teamNumber).updateData({
+      'driveBaseType': drivebaseType,
+      'innerPort': inner,
+      'outerPort': outer,
+      'bottomPort': bottom,
+      'rotationControl': rotation,
+      'positionControl': position,
+      'climber': climb,
+      'leveller': leveller,
+      'notes': notes
     });
   }
 
   void startNewMatch(String teamNumber, String matchNumber, String names) {
-    var parent = db
+    var matchDoc = db
         .collection('teams')
-        .document('Team Number: ' + teamNumber)
-        .collection('Match Scouting')
-        .document('Match Number: ' + matchNumber);
-    db.collection('teams').document('Team Number: ' + teamNumber).updateData({
-      'Names': names,
+        .document(teamNumber)
+        .collection('matches')
+        .document(matchNumber);
+
+    db.collection('teams').document(teamNumber).updateData({
+      'names': names,
     });
-    parent.setData({
-      'Auton': {},
-      'Teleop': {},
-      'Endgame': {},
-      'Summary': {},
-    }, merge: true);
-    parent.setData({
-      'Auton': {
-        'Bottom Port': 0,
-        'Outer Port': 0,
-        'Inner Port': 0,
-        'Bottom Port Missed': 0,
-        'Inner Port Missed': 0,
-        'Outer Port Missed': 0,
-        'Crossed Initiation Line': false,
-        'Total Points': 0,
-      }
-    }, merge: true);
-    parent.setData({
-      'Teleop': {
-        'Bottom Port': 0,
-        'Outer Port': 0,
-        'Inner Port': 0,
-        'Bottom Port Missed': 0,
-        'Inner Port Missed': 0,
-        'Outer Port Missed': 0,
-        'Rotation Control': false,
-        'Position Control': false,
-        'Total Points': 0,
-      }
-    }, merge: true);
-    parent.setData({
-      'Endgame': {
-        'Bottom Port': 0,
-        'Outer Port': 0,
-        'Inner Port': 0,
-        'Bottom Port Missed': 0,
-        'Inner Port Missed': 0,
-        'Outer Port Missed': 0,
-        'Stages Completed': 0,
-        'Ending State': '',
-        'Total Points': 0,
-      }
-    }, merge: true);
-    parent.setData({
-      'Summary': {
-        'Crossed Initiation Line': false,
-        'Bottom Port': 0,
-        'Outer Port': 0,
-        'Inner Port': 0,
-        'Bottom Port Missed': 0,
-        'Inner Port Missed': 0,
-        'Outer Port Missed': 0,
-        'Rotation Control': false,
-        'Position Control': false,
-        'Ending State': '',
-        'Match Result': '',
-        'Total Points': 0,
-        'Ranking Points': 0,
-        'Fouls': 0,
-        'Final Comments': '',
-        'Scouters': '',
-        'Stages Completed': 0,
+    matchDoc.setData({
+      'auton': {
+        'bottomPort': 0,
+        'outerPort': 0,
+        'innerPort': 0,
+        'bottomPortMissed': 0,
+        'innerPortMissed': 0,
+        'outerPortMissed': 0,
+        'crossedInitiationLine': false,
+        'totalPoints': 0,
+      },
+      'teleop': {
+        'bottomPort': 0,
+        'outerPort': 0,
+        'innerPort': 0,
+        'bottomPortMissed': 0,
+        'innerPortMissed': 0,
+        'outerPortMissed': 0,
+        'rotationControl': false,
+        'positionControl': false,
+        'totalPoints': 0,
+      },
+      'endgame': {
+        'bottomPort': 0,
+        'outerPort': 0,
+        'innerPort': 0,
+        'bottomPortMissed': 0,
+        'innerPortMissed': 0,
+        'outerPortMissed': 0,
+        'stagesCompleted': 0,
+        'endState': '',
+        'totalPoints': 0,
+      },
+      'summary': {
+        'crossedInitiationLine': false,
+        'bottomPort': 0,
+        'outerPort': 0,
+        'innerPort': 0,
+        'bottomPortMissed': 0,
+        'innerPortMissed': 0,
+        'outerPortMissed': 0,
+        'rotationControl': false,
+        'positionControl': false,
+        'endState': '',
+        'result': '',
+        'totalPoints': 0,
+        'rankingPoints': 0,
+        'fouls': 0,
+        'comments': '',
+        'scouters': '',
+        'stagesCompleted': 0,
       }
     }, merge: true);
   }
@@ -144,19 +125,19 @@ class DatabaseOperations {
 
     db
         .collection('teams')
-        .document('Team Number: ' + teamNumber)
-        .collection('Match Scouting')
-        .document('Match Number: ' + matchNumber)
+        .document(teamNumber)
+        .collection('matches')
+        .document(matchNumber)
         .updateData({
-      'Auton': {
-        'Bottom Port': bottomPort * 2,
-        'Outer Port': outerPort * 4,
-        'Inner Port': innerPort * 6,
-        'Inner Port Missed': innerPortMissed,
-        'Outer Port Missed': outerPortMissed,
-        'Bottom Port Missed': bottomPortMissed,
-        'Crossed Initiation Line': crossedLine,
-        'Total Points': totalPoints,
+      'auton': {
+        'bottomPort': bottomPort * 2,
+        'outerPort': outerPort * 4,
+        'innerPort': innerPort * 6,
+        'innerPortMissed': innerPortMissed,
+        'outerPortMissed': outerPortMissed,
+        'bottomPortMissed': bottomPortMissed,
+        'crossedInitiationLine': crossedLine,
+        'totalPoints': totalPoints,
       }
     });
     this.updateMatchDataSummary(teamNumber, matchNumber);
@@ -177,20 +158,20 @@ class DatabaseOperations {
 
     db
         .collection('teams')
-        .document('Team Number: ' + teamNumber)
-        .collection('Match Scouting')
-        .document('Match Number: ' + matchNumber)
+        .document(teamNumber)
+        .collection('matches')
+        .document(matchNumber)
         .updateData({
-      'Teleop': {
-        'Bottom Port': bottomPort * 1,
-        'Outer Port': outerPort * 2,
-        'Inner Port': innerPort * 3,
-        'Inner Port Missed': innerPortMissed,
-        'Outer Port Missed': outerPortMissed,
-        'Bottom Port Missed': bottomPortMissed,
-        'Rotation Control': rotationControl,
-        'Position Control': positionControl,
-        'Total Points': totalPoints,
+      'teleop': {
+        'bottomPort': bottomPort * 1,
+        'outerPort': outerPort * 2,
+        'innerPort': innerPort * 3,
+        'innerPortMissed': innerPortMissed,
+        'outerPortMissed': outerPortMissed,
+        'bottomPortMissed': bottomPortMissed,
+        'rotationControl': rotationControl,
+        'positionControl': positionControl,
+        'totalPoints': totalPoints,
       }
     });
     this.updateMatchDataSummary(teamNumber, matchNumber);
@@ -212,20 +193,20 @@ class DatabaseOperations {
 
     db
         .collection('teams')
-        .document('Team Number: ' + teamNumber)
-        .collection('Match Scouting')
-        .document('Match Number: ' + matchNumber)
+        .document(teamNumber)
+        .collection('matches')
+        .document(matchNumber)
         .updateData({
-      'Endgame': {
-        'Bottom Port': bottomPort * 1,
-        'Outer Port': outerPort * 2,
-        'Inner Port': innerPort * 3,
-        'Inner Port Missed': innerPortMissed,
-        'Outer Port Missed': outerPortMissed,
-        'Bottom Port Missed': bottomPortMissed,
-        'Ending State': endState,
-        'Total Points': totalPoints,
-        'Stages Completed': stagesCompleted,
+      'endgame': {
+        'bottomPort': bottomPort * 1,
+        'outerPort': outerPort * 2,
+        'innerPort': innerPort * 3,
+        'innerPortMissed': innerPortMissed,
+        'outerPortMissed': outerPortMissed,
+        'bottomPortMissed': bottomPortMissed,
+        'endState': endState,
+        'totalPoints': totalPoints,
+        'stagesCompleted': stagesCompleted,
       }
     });
     this.updateMatchDataSummary(teamNumber, matchNumber);
@@ -235,14 +216,14 @@ class DatabaseOperations {
       {String matchResult, int fouls, String finalComments}) {
     db
         .collection('teams')
-        .document('Team Number: ' + teamNumber)
-        .collection('Match Scouting')
-        .document('Match Number: ' + matchNumber)
+        .document(teamNumber)
+        .collection('matches')
+        .document(matchNumber)
         .updateData({
-      'Summary': {
-        'Match Result': matchResult,
-        'Fouls': fouls,
-        'Final Comments': finalComments,
+      'summary': {
+        'result': matchResult,
+        'fouls': fouls,
+        'comments': finalComments,
       }
     });
 
@@ -252,71 +233,68 @@ class DatabaseOperations {
   void updateMatchDataSummary(String teamNumber, String matchNumber) {
     db
         .collection('teams')
-        .document('Team Number: ' + teamNumber)
-        .collection('Match Scouting')
-        .document('Match Number: ' + matchNumber)
+        .document(teamNumber)
+        .collection('matches')
+        .document(matchNumber)
         .get()
         .then((DocumentSnapshot dataSnapshot) {
       var map = dataSnapshot.data.map((String key, Object value) {
         return MapEntry(key, value);
       });
-      Map<dynamic, dynamic> summary = map['Summary'];
-      Map<dynamic, dynamic> endgame = map['Endgame'];
-      Map<dynamic, dynamic> auton = map['Auton'];
-      Map<dynamic, dynamic> teleop = map['Teleop'];
+      Map<dynamic, dynamic> summary = map['summary'];
+      Map<dynamic, dynamic> endgame = map['endgame'];
+      Map<dynamic, dynamic> auton = map['auton'];
+      Map<dynamic, dynamic> teleop = map['teleop'];
       var rp = 0;
-      if (summary['Match Result'] == 'Win')
+      if (summary['result'] == 'Win')
         rp += 2;
-      else if (summary['Match Result'] == 'Draw') rp += 1;
-      if (int.parse(endgame['Total Points'].toString()) >= 65) {
+      else if (summary['result'] == 'Draw') rp += 1;
+      if (int.parse(endgame['totalPoints'].toString()) >= 65) {
         rp += 1;
       }
-      if (int.parse(endgame['Stages Completed'].toString()) == 3) {
+      if (int.parse(endgame['stagesCompleted'].toString()) == 3) {
         rp += 1;
       }
-      // if (int.parse(summary['Stages Completed'].toString()) == 3)
+      // if (int.parse(summary['stagesCompleted'].toString()) == 3)
       //   rp += 1;
       db
           .collection('teams')
-          .document('Team Number: ' + teamNumber)
-          .collection('Match Scouting')
-          .document('Match Number: ' + matchNumber)
+          .document(teamNumber)
+          .collection('matches')
+          .document(matchNumber)
           .updateData({
-        'Summary': {
-          'Crossed Initiation Line': auton['Crossed Initiation Line'],
-          'Bottom Port': int.parse(auton['Bottom Port'].toString()) +
-              teleop['Bottom Port'] +
-              endgame['Bottom Port'],
-          'Bottom Port Missed':
-              int.parse(auton['Bottom Port Missed'].toString()) +
-                  teleop['Bottom Port Missed'] +
-                  endgame['Bottom Port Missed'],
-          'Outer Port': int.parse(auton['Outer Port'].toString()) +
-              teleop['Outer Port'] +
-              endgame['Outer Port'],
-          'Outer Port Missed':
-              int.parse(auton['Outer Port Missed'].toString()) +
-                  teleop['Outer Port Missed'] +
-                  endgame['Outer Port Missed'],
-          'Inner Port': int.parse(auton['Inner Port'].toString()) +
-              teleop['Inner Port'] +
-              endgame['Inner Port'],
-          'Inner Port Missed':
-              int.parse(auton['Inner Port Missed'].toString()) +
-                  teleop['Inner Port Missed'] +
-                  endgame['Inner Port Missed'],
-          'Rotation Control': teleop['Rotation Control'],
-          'Position Control': teleop['Position Control'],
-          'Ending State': endgame['Ending State'],
-          'Match Result': summary['Match Result'],
-          'Total Points': int.parse(auton['Total Points'].toString()) +
-              teleop['Total Points'] +
-              endgame['Total Points'],
-          'Ranking Points': rp,
-          'Fouls': summary['Fouls'],
-          'Final Comments': summary['Final Comments'],
-          'Scouters': summary['Scouters'],
-          'Stages Completed': summary['Stages Completed'],
+        'summary': {
+          'crossedInitiationLine': auton['crossedInitiationLine'],
+          'bottomPort': int.parse(auton['bottomPort'].toString()) +
+              teleop['bottomPort'] +
+              endgame['bottomPort'],
+          'bottomPortMissed': int.parse(auton['bottomPortMissed'].toString()) +
+              teleop['bottomPortMissed'] +
+              endgame['bottomPortMissed'],
+          'outerPort': int.parse(auton['outerPort'].toString()) +
+              teleop['outerPort'] +
+              endgame['outerPort'],
+          'outerPortMissed': int.parse(auton['outerPortMissed'].toString()) +
+              teleop['outerPortMissed'] +
+              endgame['outerPortMissed'],
+          'innerPort': int.parse(auton['innerPort'].toString()) +
+              teleop['innerPort'] +
+              endgame['innerPort'],
+          'innerPortMissed': int.parse(auton['innerPortMissed'].toString()) +
+              teleop['innerPortMissed'] +
+              endgame['innerPortMissed'],
+          'rotationControl': teleop['rotationControl'],
+          'positionControl': teleop['positionControl'],
+          'endState': endgame['endState'],
+          'result': summary['result'],
+          'totalPoints': int.parse(auton['totalPoints'].toString()) +
+              teleop['totalPoints'] +
+              endgame['totalPoints'],
+          'rankingPoints': rp,
+          'fouls': summary['fouls'],
+          'comments': summary['comments'],
+          'scouters': summary['scouters'],
+          'stagesCompleted': summary['stagesCompleted'],
         }
       });
     });
@@ -324,22 +302,20 @@ class DatabaseOperations {
 
   Future<bool> doesPitDataExist(String teamNumber) async {
     Map<String, dynamic> empty = {
-      "Pit Scouting": {
-        'Drivebase Type': "",
-        'Inner Port': false,
-        'Outer Port': false,
-        'Bottom Port': false,
-        'Rotation Control': false,
-        'Position Control': false,
-        'Climber': false,
-        'Leveller': false,
-        'Notes': "",
-      },
-      'Names': "",
+      'driveBaseType': "",
+      'innerPort': false,
+      'outerPort': false,
+      'bottomPort': false,
+      'rotationControl': false,
+      'positionControl': false,
+      'climber': false,
+      'leveller': false,
+      'notes': "",
+      'names': "",
     };
     return await db
         .collection('teams')
-        .document('Team Number: ' + teamNumber)
+        .document(teamNumber)
         .get()
         .then((onValue) {
       if (onValue == null) {
@@ -354,62 +330,62 @@ class DatabaseOperations {
 
   Future<bool> doesMatchDataExist(String teamNumber, String matchNumber) async {
     Map<String, dynamic> empty = {
-      'Auton': {
-        'Bottom Port': 0,
-        'Outer Port': 0,
-        'Inner Port': 0,
-        'Bottom Port Missed': 0,
-        'Inner Port Missed': 0,
-        'Outer Port Missed': 0,
-        'Crossed Initiation Line': false,
-        'Total Points': 0,
+      'auton': {
+        'bottomPort': 0,
+        'outerPort': 0,
+        'innerPort': 0,
+        'bottomPortMissed': 0,
+        'innerPortMissed': 0,
+        'outerPortMissed': 0,
+        'crossedInitiationLine': false,
+        'totalPoints': 0,
       },
-      'Teleop': {
-        'Bottom Port': 0,
-        'Outer Port': 0,
-        'Inner Port': 0,
-        'Bottom Port Missed': 0,
-        'Inner Port Missed': 0,
-        'Outer Port Missed': 0,
-        'Rotation Control': false,
-        'Position Control': false,
-        'Total Points': 0,
+      'teleop': {
+        'bottomPort': 0,
+        'outerPort': 0,
+        'innerPort': 0,
+        'bottomPortMissed': 0,
+        'innerPortMissed': 0,
+        'outerPortMissed': 0,
+        'rotationControl': false,
+        'positionControl': false,
+        'totalPoints': 0,
       },
-      'Endgame': {
-        'Bottom Port': 0,
-        'Outer Port': 0,
-        'Inner Port': 0,
-        'Bottom Port Missed': 0,
-        'Inner Port Missed': 0,
-        'Outer Port Missed': 0,
-        'Stages Completed': 0,
-        'Ending State': '',
-        'Total Points': 0,
+      'endgame': {
+        'bottomPort': 0,
+        'outerPort': 0,
+        'innerPort': 0,
+        'bottomPortMissed': 0,
+        'innerPortMissed': 0,
+        'outerPortMissed': 0,
+        'stagesCompleted': 0,
+        'endState': '',
+        'totalPoints': 0,
       },
-      'Summary': {
-        'Crossed Initiation Line': false,
-        'Bottom Port': 0,
-        'Outer Port': 0,
-        'Inner Port': 0,
-        'Bottom Port Missed': 0,
-        'Inner Port Missed': 0,
-        'Outer Port Missed': 0,
-        'Rotation Control': false,
-        'Position Control': false,
-        'Ending State': '',
-        'Match Result': '',
-        'Total Points': 0,
-        'Ranking Points': 0,
-        'Fouls': 0,
-        'Final Comments': '',
-        'Stages Completed': 0,
+      'summary': {
+        'crossedInitiationLine': false,
+        'bottomPort': 0,
+        'outerPort': 0,
+        'innerPort': 0,
+        'bottomPortMissed': 0,
+        'innerPortMissed': 0,
+        'outerPortMissed': 0,
+        'rotationControl': false,
+        'positionControl': false,
+        'endState': '',
+        'result': '',
+        'totalPoints': 0,
+        'rankingPoints': 0,
+        'fouls': 0,
+        'comments': '',
+        'stagesCompleted': 0,
       }
     };
     return await db
         .collection('teams')
-        .document('Team Number: ' + teamNumber)
-        .collection('Match Scouting')
-        .document('Match Number: ' + matchNumber)
+        .document(teamNumber)
+        .collection('matches')
+        .document(matchNumber)
         .get()
         .then((onValue) {
       if (onValue == null) {

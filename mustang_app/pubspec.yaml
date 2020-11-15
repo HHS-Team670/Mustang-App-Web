@@ -25,6 +25,7 @@ dependencies:
   flutter_colorpicker:
   cloud_firestore:
   path_provider:
+  firebase_storage:
 
   flutter:
     sdk: flutter

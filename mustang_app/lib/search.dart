@@ -41,6 +41,57 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  showAlertDialog(BuildContext context, String teamNumber) {
+    FlatButton cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    FlatButton goToAnalysis = FlatButton(
+      child: Text("Analysis"),
+      onPressed: () {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MapScouter(
+              teamNumber: teamNumber,
+            ),
+          ),
+        );
+      },
+    );
+    FlatButton goToData = FlatButton(
+      child: Text("Data"),
+      onPressed: () {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TeamInfoDisplay(
+              teamNumber,
+            ),
+          ),
+        );
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Data View"),
+      content: Text("Would you like to see defense analysis or data?"),
+      actions: [cancelButton, goToAnalysis, goToData],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -79,13 +130,14 @@ class _SearchPageState extends State<SearchPage> {
               itemCount: tempSearchStore.length,
               itemBuilder: (context, index) => ListTile(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          TeamInfoDisplay(tempSearchStore[index]),
-                    ),
-                  );
+                  showAlertDialog(context, tempSearchStore[index]);
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) =>
+                  //         TeamInfoDisplay(tempSearchStore[index]),
+                  //   ),
+                  // );
                 },
                 leading: Icon(Icons.people),
                 title: RichText(

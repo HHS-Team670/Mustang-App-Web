@@ -35,7 +35,7 @@ class _TeamInfoDisplayState extends State<TeamInfoDisplay> {
     QuerySnapshot matchData = await Firestore.instance
         .collection('teams')
         .document(_team)
-        .collection('Match Scouting')
+        .collection('matches')
         .getDocuments();
 
     matchData.documents.forEach((f) {
@@ -45,7 +45,7 @@ class _TeamInfoDisplayState extends State<TeamInfoDisplay> {
 
     var lol =
         await Firestore.instance.collection('teams').document(_team).get();
-    _pitData = lol.data['Pit Scouting'];
+    _pitData = lol.data;
   }
 
   @override

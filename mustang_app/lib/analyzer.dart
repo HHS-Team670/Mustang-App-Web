@@ -1,7 +1,6 @@
 import 'datareader.dart';
 
 class Analyzer {
-
   String _teamNum;
   double _noDGames = 0,
       _lightDGames = 0,
@@ -112,7 +111,6 @@ class Analyzer {
   }
 
   double calculateRank() {
-
     _noPtAvg = _noDPts / _noDGames;
     _lightPtAvg = _lightDPts / _lightDGames;
     _heavyPtAvg = _heavyDPts / _heavyDGames;
@@ -162,7 +160,6 @@ class Analyzer {
 
   //key = teleop in zone x, value = balls scored in zone x, low zone = zone 0
   String calculateOptimalZone() {
-
     List<double> a = [
       _zone0Pts,
       _zone1Pts,
@@ -184,7 +181,6 @@ class Analyzer {
     }
 
     double largest = a[a.length - 1];
-
     if (largest == _zone0Pts) {
       return "zone 0";
     }

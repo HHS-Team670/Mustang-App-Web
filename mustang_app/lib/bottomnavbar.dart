@@ -4,6 +4,8 @@ import 'package:mustang_app/sketcher.dart';
 import './calendar.dart';
 import './scouter.dart';
 import './search.dart';
+import 'mapscouter.dart';
+import 'mapscouterkey.dart';
 
 class BottomNavBar extends BottomNavigationBar {
   static int _selectedIndex = 0;
@@ -13,6 +15,7 @@ class BottomNavBar extends BottomNavigationBar {
     Calendar.route,
     Scouter.route,
     SearchPage.route,
+    MapScouterKey.route,
     SketchPage.route,
   ];
 
@@ -35,6 +38,10 @@ class BottomNavBar extends BottomNavigationBar {
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
               title: Text('Data'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.legend_toggle),
+              title: Text('Key'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.edit),
