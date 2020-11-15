@@ -37,6 +37,7 @@ class _MapScouterState extends State<MapScouter> {
 
   _getPoint() {
     List<PlotPoint> points = new List<PlotPoint>();
+    /*
     DataReader.teamAverages[_teamNumber].forEach((key, value) {
       String val = value.toString();
       val = val.substring(0, 3);
@@ -95,7 +96,7 @@ class _MapScouterState extends State<MapScouter> {
       }
     });
     print(points.length);
-
+    */
     return points;
   }
 
