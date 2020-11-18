@@ -4,7 +4,9 @@ import './bottomnavbar.dart';
 
 class HomePage extends StatefulWidget {
   HomePage() {
-    DataReader.init();
+    DataReader.init().then((value) {
+      DataReader.csvToFirestore().then((value) => print('Finished'));
+    });
   }
   @override
   State<StatefulWidget> createState() {
