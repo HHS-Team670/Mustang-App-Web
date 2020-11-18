@@ -14,6 +14,28 @@ class DataReader {
   static List<String> _teams = [];
   static Firestore db = Firestore.instance;
   static DatabaseOperations ops = new DatabaseOperations();
+  static const List<String> keys = [
+    'startingLocation',
+    'autoBallsLow',
+    'autoBalls1',
+    'autoBalls23',
+    'autoBalls4',
+    'autoBalls5',
+    'autoBalls6',
+    'autoBallsAcquired',
+    'autoEndLocation',
+    'teleBallsLow',
+    'teleBalls1',
+    'teleBalls23',
+    'teleBalls4',
+    'teleBalls5',
+    'teleBalls6',
+    'wheelSpin',
+    'wheelColorMatch',
+    'defender',
+    'target'
+  ];
+
   DataReader() {
     _averages = {};
     _teamAverages = {};
@@ -297,70 +319,4 @@ class DataReader {
   }
 
   // static Future<void> importDB() async { }
-
-  static Future<void> csvToFirestore() async {
-    await _readData();
-    if (_data.length <= 0) {
-      throw new Error();
-    }
-    List<String> lines = _data.split("\n");
-    int lineCounter = 1;
-    final List<String> keys = lines[0].split(',').map((e) {
-      String val =
-          e.trim().replaceAll('/', '').replaceAll('[', '').replaceAll(']', '');
-      return val;
-    }).toList();
-
-    while (lineCounter < lines.length) {
-      List<String> values = lines[lineCounter].split(',');
-      String teamNumber = values[1].trim();
-      String matchNumber = values[0].trim();
-
-      await db.collection('teams').document(teamNumber).updateData({
-        'driveBaseType': "",
-        'innerPort': false,
-        'outerPort': false,
-        'bottomPort': false,
-        'rotationControl': false,
-        'positionControl': false,
-        'climber': false,
-        'leveller': false,
-        'notes': "",
-      });
-      Map<String, dynamic> data = {};
-      int index = 0;
-      keys.forEach((element) {
-        data[element] = int.parse(values[index].trim(), onError: ((str) {
-          data[element] = values[index].trim();
-          return null;
-        }));
-        if (data[element] == null) {
-          data[element] = values[index].trim();
-        }
-        index++;
-      });
-      await db
-          .collection('teams')
-          .document(teamNumber)
-          .collection('matches')
-          .document(matchNumber)
-          .updateData(data);
-      lineCounter++;
-    }
-  }
-
-  static Future<void> updateDB() async {
-    QuerySnapshot docs = await db.collection('teams').getDocuments();
-    for (int i = 0; i < docs.documents.length; i++) {
-      DocumentSnapshot team = docs.documents[i];
-      team.reference.updateData({'hasAnalysis': false});
-      QuerySnapshot matches =
-          await team.reference.collection('matches').getDocuments();
-      for (int j = 0; j < matches.documents.length; j++) {
-        DocumentSnapshot match = matches.documents[j];
-        match.reference
-            .updateData({'hasAnalysis': false, 'autoStartLocation': 'n/a'});
-      }
-    }
-  }
 }
