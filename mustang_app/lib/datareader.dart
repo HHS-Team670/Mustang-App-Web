@@ -162,9 +162,6 @@ class DataReader {
     lines.forEach((element) {
       List<String> values = element.split(',');
       if (values[1].trim() == teamNumber) {
-        if (!counters.keys.contains(values[10].trim())) {
-          print(values[10].trim());
-        }
         counters[values[10].trim()] = counters[values[10].trim()] + 1;
       }
     });
@@ -279,7 +276,7 @@ class DataReader {
 
     Map<String, Map<String, dynamic>> data = {};
     final Firestore db = Firestore.instance;
-    var ref = FirebaseStorage.instance.ref().child('db.json');
+    StorageReference ref = FirebaseStorage.instance.ref().child('db.json');
     QuerySnapshot teams = await db.collection('teams').getDocuments();
     teams.documents.forEach((doc) async {
       data[doc.documentID] = {};

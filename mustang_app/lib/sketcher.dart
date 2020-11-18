@@ -60,7 +60,6 @@ class _SketchPageState extends State<SketchPage> {
               setState(() {
                 currentColor = pickerColor;
                 _sketcher.setColor(currentColor);
-                print("log");
               });
               Navigator.of(context).pop();
             },

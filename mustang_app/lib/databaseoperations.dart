@@ -48,7 +48,7 @@ class DatabaseOperations {
   }
 
   void startNewMatch(String teamNumber, String matchNumber, String names) {
-    var matchDoc = db
+    DocumentReference matchDoc = db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -238,14 +238,15 @@ class DatabaseOperations {
         .document(matchNumber)
         .get()
         .then((DocumentSnapshot dataSnapshot) {
-      var map = dataSnapshot.data.map((String key, Object value) {
+      Map<String, dynamic> map =
+          dataSnapshot.data.map((String key, Object value) {
         return MapEntry(key, value);
       });
       Map<dynamic, dynamic> summary = map['summary'];
       Map<dynamic, dynamic> endgame = map['endgame'];
       Map<dynamic, dynamic> auton = map['auton'];
       Map<dynamic, dynamic> teleop = map['teleop'];
-      var rp = 0;
+      int rp = 0;
       if (summary['result'] == 'Win')
         rp += 2;
       else if (summary['result'] == 'Draw') rp += 1;

@@ -314,7 +314,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: ListTile(
                   title: Text(event.toString()),
-                  onTap: () => print('$event tapped!'),
+                  // onTap: () => print('$event tapped!'),
                 ),
               ))
           .toList(),

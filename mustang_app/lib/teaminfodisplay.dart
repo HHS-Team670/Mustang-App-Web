@@ -25,9 +25,6 @@ class _TeamInfoDisplayState extends State<TeamInfoDisplay> {
     _team = team;
     getData().then((onValue) {
       setState(() {});
-      print(_pitData);
-      print('\n');
-      print(_matchData);
     });
   }
 
@@ -43,9 +40,9 @@ class _TeamInfoDisplayState extends State<TeamInfoDisplay> {
       _matchData.add(f.data);
     });
 
-    var lol =
+    DocumentSnapshot data =
         await Firestore.instance.collection('teams').document(_team).get();
-    _pitData = lol.data;
+    _pitData = data.data;
   }
 
   @override
