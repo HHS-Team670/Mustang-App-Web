@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
@@ -13,25 +15,18 @@ class TeamDataAnalyzer {
   static List<DocumentSnapshot> _teams = [];
 
   static const List<String> keys = [
-    'startingLocation',
     'autoBallsLow',
     'autoBalls1',
     'autoBalls23',
     'autoBalls4',
     'autoBalls5',
     'autoBalls6',
-    'autoBallsAcquired',
-    'autoEndLocation',
     'teleBallsLow',
     'teleBalls1',
     'teleBalls23',
     'teleBalls4',
     'teleBalls5',
     'teleBalls6',
-    'wheelSpin',
-    'wheelColorMatch',
-    'defender',
-    'target'
   ];
 
   static Future<void> init() async {
@@ -78,28 +73,27 @@ class TeamDataAnalyzer {
     return _teamAverages[teamNumber];
   }
 
-  static Future<Map<String, dynamic>> calcTeamAverages(
-      String teamNumber) async {
+  static Future<Map<String, double>> calcTeamAverages(
+      String teamNumber, hasAnalysis) async {
     QuerySnapshot matches = await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
-        .where('hasAnalysis', isEqualTo: true)
         .getDocuments();
 
     Map<String, int> totals = {};
     keys.forEach((key) {
       totals[key] = 0;
     });
-
+    if (!hasAnalysis) {
+      return totals.map((key, value) => MapEntry(key, -1));
+    }
     matches.documents.forEach((match) {
       keys.forEach((key) {
         totals[key] = totals[key] + match.data[key];
       });
     });
-    if (matches.documents.length == 0) {
-      return totals.map((key, value) => MapEntry(key, 'n/a'));
-    }
+
     return totals
         .map((key, value) => MapEntry(key, (value / matches.documents.length)));
   }
@@ -185,7 +179,7 @@ class TeamDataAnalyzer {
     return counter;
   }
 
-  static Future<Map<String, dynamic>> getTeamTargetAverages(
+  static Future<Map<String, double>> getTeamTargetAverages(
       String teamNumber, String targetType) async {
     QuerySnapshot matches = await Constants.db
         .collection('teams')
@@ -206,7 +200,7 @@ class TeamDataAnalyzer {
       });
     });
     if (matches.documents.length == 0) {
-      return totals.map((key, value) => MapEntry(key, 'n/a'));
+      return totals.map((key, value) => MapEntry(key, -1));
     }
     return totals
         .map((key, value) => MapEntry(key, (value / matches.documents.length)));
@@ -220,7 +214,8 @@ class TeamDataAnalyzer {
     Map<String, Map<String, double>> averages = {};
     for (int i = 0; i < teams.documents.length; i++) {
       DocumentSnapshot team = teams.documents[i];
-      averages[team.documentID] = await calcTeamAverages(team.documentID);
+      averages[team.documentID] =
+          await calcTeamAverages(team.documentID, team.data['hasAnalysis']);
     }
     return averages;
   }
@@ -251,4 +246,53 @@ class TeamDataAnalyzer {
   }
 
   // static Future<void> importDB() async { }
+
+  static Future<void> updateDB() async {
+    String data = await rootBundle.loadString('assets/data.csv');
+    List<String> lines = data.split('\n');
+    int lineCounter = 1;
+    List<String> dataKeys = lines[0].split(',').map((e) => e.trim()).toList();
+    while (lineCounter < lines.length) {
+      print('Updating... ' + lineCounter.toString());
+      List<String> values =
+          lines[lineCounter].split(',').map((e) => e.trim()).toList();
+      String teamNumber = values[1], matchNumber = values[0];
+      Map<String, dynamic> newMatchData = dataKeys.asMap().map((key, value) {
+        dynamic newVal = values[key];
+        if (value.contains('Balls') && !value.contains('Acquired') ||
+            value.contains('wheel')) {
+          newVal = int.parse(newVal);
+        }
+        return MapEntry(value, newVal);
+      });
+      newMatchData['hasAnalysis'] = true;
+      await Constants.db
+          .collection('teams')
+          .document(teamNumber)
+          .collection('matches')
+          .document(matchNumber)
+          .updateData(newMatchData);
+      lineCounter++;
+    }
+    // QuerySnapshot teams = await Constants.db
+    //     .collection('teams')
+    //     .where('hasAnalysis', isEqualTo: true)
+    //     .getDocuments();
+    // for (int i = 0; i < teams.documents.length; i++) {
+    //   DocumentSnapshot team = teams.documents[i];
+    //   QuerySnapshot matches =
+    //       await team.reference.collection('matches').getDocuments();
+    //   for (int j = 0; j < matches.documents.length; j++) {
+    //     DocumentSnapshot match = matches.documents[j];
+    //     await match.reference.updateData({
+    //       'startingLocation': match.data['autoEndLocation'],
+    //       'autoEndLocation': match.data['teleBalls1'],
+    //       'teleBalls1': 0,
+    //       'teleBallsLow': match.data['target'],
+    //       'target': match.data['teleBallsLow'],
+    //       'autoBallsLow': 0,
+    //     });
+    //   }
+    // }
+  }
 }

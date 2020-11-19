@@ -57,9 +57,9 @@ class AnalyzerState extends State<Analyzer> {
   }
 
   Future<void> init() async {
-    setState(() {
-      _hasAnalysis = TeamDataAnalyzer.getTeamDoc(_teamNum)['hasAnalysis'];
-    });
+    // setState(() {
+    _hasAnalysis = TeamDataAnalyzer.getTeamDoc(_teamNum)['hasAnalysis'];
+    // });
     if (!_hasAnalysis) {
       return;
     }
@@ -246,10 +246,10 @@ class AnalyzerState extends State<Analyzer> {
 
   @override
   Widget build(BuildContext context) {
-    if (_initialized) {
-      return Text(this.getReport());
-    } else if (!_hasAnalysis) {
+    if (!_hasAnalysis) {
       return Text('No Analysis For This Team =(');
+    } else if (_initialized) {
+      return Text(this.getReport());
     } else if (_teamNum.isEmpty) {
       return Text('Error! No Team Number Entered');
     } else {

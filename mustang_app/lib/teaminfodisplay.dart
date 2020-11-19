@@ -38,7 +38,9 @@ class _TeamInfoDisplayState extends State<TeamInfoDisplay> {
 
     matchData.documents.forEach((f) {
       _matches.add(f.documentID);
-      _matchData.add(f.data);
+      Map<String, dynamic> data = f.data;
+      data.removeWhere((key, value) => !(value is Map));
+      _matchData.add(data);
     });
 
     DocumentSnapshot data =

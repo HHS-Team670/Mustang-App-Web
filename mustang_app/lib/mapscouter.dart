@@ -32,7 +32,9 @@ class _MapScouterState extends State<MapScouter> {
 
   List<PlotPoint> _getPoints() {
     List<PlotPoint> points = new List<PlotPoint>();
-    if (TeamDataAnalyzer.teamAverages[_teamNumber] != null) {
+    if (TeamDataAnalyzer.teamAverages[_teamNumber] != null &&
+        TeamDataAnalyzer.getTeamDoc(_teamNumber).data['hasAnalysis']) {
+      print('getting points');
       TeamDataAnalyzer.teamAverages[_teamNumber].forEach((key, value) {
         String val = value.toString();
         double x = 0, y = 0, shift = 0, textSize = 15;
@@ -89,6 +91,8 @@ class _MapScouterState extends State<MapScouter> {
           points.add(new PlotPoint((x) + shift, (y), fillColor, val, textSize));
         }
       });
+    } else {
+      print('no points');
     }
     return points;
   }

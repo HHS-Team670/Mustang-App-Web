@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import './bottomnavbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'teamdataanalyzer.dart';
 
 class HomePage extends StatefulWidget {
   HomePage() {
-    print("HELLLO: " + (Firestore.instance == null).toString());
+    if (!TeamDataAnalyzer.initialized) {
+      TeamDataAnalyzer.init();
+    }
   }
   @override
   State<StatefulWidget> createState() {
@@ -24,6 +26,17 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Home'),
       ),
+      // body: Column(
+      //   children: [
+      //     Text('Welcome!',
+      //         style: TextStyle(
+      //           color: Colors.green,
+      //           fontSize: 30,
+      //           fontWeight: FontWeight.bold,
+      //         )),
+      //     RaisedButton(onPressed: () async {}, child: Text('Update DB'))
+      //   ],
+      // ),
       body: Center(
         child: Text('Welcome!',
             style: TextStyle(

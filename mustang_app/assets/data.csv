@@ -1,4 +1,4 @@
-Match Number,Team Number,Starting Location,Auto Balls [Low],Auto Balls [1],Auto Balls [2/3],Auto Balls [4],Auto Balls [5],Auto Balls [6],Auto Balls [Acquired],Auto End Location,Tele Balls [Low],Tele Balls [1],Tele Balls [2/3],Tele Balls [4],Tele Balls [5],Tele Balls [6],Wheel Spin,Wheel Color Match,Defender,Target
+matchNumber,teamNumber,startingLocation,autoBallsLow,autoBalls1,autoBalls23,autoBalls4,autoBalls5,autoBalls6,autoBallsAcquired,autoEndLocation,teleBallsLow,teleBalls1,teleBalls23,teleBalls4,teleBalls5,teleBalls6,wheelSpin,wheelColorMatch,defender,target
 1,4854,Inline with Opposing Trench,0,0,0,0,0,0,None,Auto Line,0,0,0,0,0,0,0,0,None,None
 1,8179,Right of Goal,0,0,0,0,0,0,None,Alliance Trench,0,0,0,0,0,0,0,0,None,None
 1,5577,Inline with Opposing Trench,0,0,0,0,0,0,None,Auto Line,0,0,0,0,0,0,0,0,None,None
