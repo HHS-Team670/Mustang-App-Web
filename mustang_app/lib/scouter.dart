@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/pitscouting.dart';
-import 'package:flutter/services.dart';
 import 'header.dart';
 import 'autonscouting.dart';
 import 'bottomnavbar.dart';
@@ -37,26 +36,16 @@ class _ScouterState extends State<Scouter> {
         if (pit) {
           db.startPitScouting(
               _teamNumberController.text, _namesController.text);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PitScouter(
-                _teamNumberController.text,
-              ),
-            ),
-          );
+          Navigator.pushNamed(context, PitScouter.route, arguments: {
+            'teamNumber': _teamNumberController.text,
+          });
         } else {
           db.startNewMatch(_teamNumberController.text,
               _matchNumberController.text, _namesController.text);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AutonScouter(
-                _teamNumberController.text,
-                _matchNumberController.text,
-              ),
-            ),
-          );
+          Navigator.pushNamed(context, AutonScouter.route, arguments: {
+            'teamNumber': _teamNumberController.text,
+            'matchNumber': _matchNumberController.text
+          });
         }
       },
     );
@@ -84,10 +73,6 @@ class _ScouterState extends State<Scouter> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
     return Scaffold(
       appBar: Header(
         context,
@@ -152,14 +137,10 @@ class _ScouterState extends State<Scouter> {
                       } else {
                         db.startPitScouting(
                             _teamNumberController.text, _namesController.text);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PitScouter(
-                              _teamNumberController.text,
-                            ),
-                          ),
-                        );
+                        Navigator.pushNamed(context, PitScouter.route,
+                            arguments: {
+                              'teamNumber': _teamNumberController.text,
+                            });
                       }
                     });
                   });
@@ -204,18 +185,13 @@ class _ScouterState extends State<Scouter> {
                       } else {
                         db.startNewMatch(_teamNumberController.text,
                             _matchNumberController.text, _namesController.text);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AutonScouter(
-                              _teamNumberController.text,
-                              _matchNumberController.text,
-                            ),
-                          ),
-                        );
+                        Navigator.pushNamed(context, AutonScouter.route,
+                            arguments: {
+                              'teamNumber': _teamNumberController.text,
+                              'matchNumber': _matchNumberController.text
+                            });
                       }
                     });
-                    // Navigator.pushNamed(context, AutonScouter.route);
                   });
                 },
                 padding: EdgeInsets.all(15),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'bottomnavbar.dart';
 
 class MapScouterKey extends StatefulWidget {
@@ -24,10 +23,6 @@ class _MapScouterKeyState extends State<MapScouterKey> {
   Color autoStopPos = Colors.blueAccent;
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),

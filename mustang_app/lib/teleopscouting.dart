@@ -9,7 +9,7 @@ class TeleopScouter extends StatefulWidget {
   static const String route = '/TeleopScouter';
   String _teamNumber, _matchNumber;
 
-  TeleopScouter(teamNumber, matchNumber) {
+  TeleopScouter({String teamNumber, String matchNumber}) {
     _teamNumber = teamNumber;
     _matchNumber = matchNumber;
   }
@@ -128,12 +128,12 @@ class _TeleopScouterState extends State<TeleopScouter> {
                       bottomPortMissed: _bottomPortMissed.count,
                       positionControl: _positionControl,
                       rotationControl: _rotationControl);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              EndgameScouter(_teamNumber, _matchNumber)));
-                  // Navigator.pushNamed(context, EndgameScouter.route);
+
+                  Navigator.pushNamed(context, EndgameScouter.route,
+                      arguments: {
+                        'teamNumber': _teamNumber,
+                        'matchNumber': _matchNumber
+                      });
                 },
                 padding: EdgeInsets.all(15),
                 child: Text(

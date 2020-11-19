@@ -8,11 +8,11 @@ class Analyzer extends StatefulWidget {
   }
   @override
   State<StatefulWidget> createState() {
-    return AnalyzerState(_teamNum);
+    return _AnalyzerState(_teamNum);
   }
 }
 
-class AnalyzerState extends State<Analyzer> {
+class _AnalyzerState extends State<Analyzer> {
   bool _initialized = false, _hasAnalysis = true;
   String _teamNum;
   double _noDGames = 0,
@@ -49,7 +49,7 @@ class AnalyzerState extends State<Analyzer> {
     -> while rank isn't subjective, the way people interpret a rank is. However, since scouting with a subjective no/light/heavy system, it's important to take actual experience and observations into consideration as well
 	 */
 
-  AnalyzerState(String teamNum) {
+  _AnalyzerState(String teamNum) {
     _teamNum = teamNum;
   }
 

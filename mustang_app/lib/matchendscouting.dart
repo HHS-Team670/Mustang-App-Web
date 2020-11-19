@@ -9,7 +9,7 @@ class MatchEndScouter extends StatefulWidget {
   static const String route = '/MatchEndScouter';
   String _teamNumber, _matchNumber;
 
-  MatchEndScouter(teamNumber, matchNumber) {
+  MatchEndScouter({String teamNumber, String matchNumber}) {
     _teamNumber = teamNumber;
     _matchNumber = matchNumber;
   }

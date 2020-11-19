@@ -5,9 +5,9 @@ import 'package:mustang_app/header.dart';
 
 class TeamInfoDisplay extends StatefulWidget {
   String _team;
-
-  TeamInfoDisplay(String team) {
-    _team = team;
+  static const String route = '/TeamInfoDisplay';
+  TeamInfoDisplay({String teamNumber}) {
+    _team = teamNumber;
   }
 
   @override

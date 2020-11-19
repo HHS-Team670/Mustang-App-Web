@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'bottomnavbar.dart';
-import 'package:flutter/services.dart';
 import 'teamdataanalyzer.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,10 +17,6 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),

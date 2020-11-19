@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mustang_app/bottomnavbar.dart';
-import 'package:flutter/services.dart';
 
 class SketchPage extends StatefulWidget {
   static const String route = './Sketcher';
@@ -72,10 +71,6 @@ class _SketchPageState extends State<SketchPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
     final Container sketchArea = Container(
       margin: EdgeInsets.all(1.0),
       alignment: Alignment.topLeft,

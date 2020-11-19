@@ -9,7 +9,9 @@ class AutonScouter extends StatefulWidget {
   static const String route = '/AutonScouter';
   String _teamNumber, _matchNumber;
 
-  AutonScouter(String teamNumber, String matchNumber) {
+  AutonScouter({String teamNumber, String matchNumber}) {
+    print("Auton: " + teamNumber + " " + matchNumber);
+
     _teamNumber = teamNumber;
     _matchNumber = matchNumber;
   }
@@ -101,12 +103,11 @@ class _AutonScouterState extends State<AutonScouter> {
                         bottomPort: _bottomPort.count,
                         bottomPortMissed: _bottomPortMissed.count,
                         crossedLine: _crossedInitiationLine);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                TeleopScouter(_teamNumber, _matchNumber)));
-                    // Navigator.pushNamed(context, TeleopScouter.route);
+                    Navigator.pushNamed(context, TeleopScouter.route,
+                        arguments: {
+                          'teamNumber': _teamNumber,
+                          'matchNumber': _matchNumber
+                        });
                   },
                   child: Text(
                     'Next',

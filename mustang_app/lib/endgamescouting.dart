@@ -9,7 +9,7 @@ class EndgameScouter extends StatefulWidget {
   static const String route = '/EndgameScouter';
   String _teamNumber, _matchNumber;
 
-  EndgameScouter(teamNumber, matchNumber) {
+  EndgameScouter({String teamNumber, String matchNumber}) {
     _teamNumber = teamNumber;
     _matchNumber = matchNumber;
   }
@@ -116,12 +116,11 @@ class _EndgameScouterState extends State<EndgameScouter> {
                         bottomPortMissed: _bottomPortMissed.count,
                         stagesCompleted: _stagesCompletedController.count,
                         endState: _endingState);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                MatchEndScouter(_teamNumber, _matchNumber)));
-                    // Navigator.pushNamed(context, MatchEndScouter.route);
+                    Navigator.pushNamed(context, MatchEndScouter.route,
+                        arguments: {
+                          'teamNumber': _teamNumber,
+                          'matchNumber': _matchNumber
+                        });
                   },
                   padding: EdgeInsets.all(15),
                   child: Text(

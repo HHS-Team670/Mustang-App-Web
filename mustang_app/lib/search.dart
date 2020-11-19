@@ -3,8 +3,6 @@ import 'package:mustang_app/header.dart';
 import 'mapscouter.dart';
 import 'bottomnavbar.dart';
 import 'teaminfodisplay.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'teamdataanalyzer.dart';
 
 class SearchPage extends StatefulWidget {
@@ -59,28 +57,18 @@ class _SearchPageState extends State<SearchPage> {
       child: Text("Analysis"),
       onPressed: () {
         Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MapScouter(
-              teamNumber: teamNumber,
-            ),
-          ),
-        );
+        Navigator.pushNamed(context, MapScouter.route, arguments: {
+          'teamNumber': teamNumber,
+        });
       },
     );
     FlatButton goToData = FlatButton(
       child: Text("Data"),
       onPressed: () {
         Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TeamInfoDisplay(
-              teamNumber,
-            ),
-          ),
-        );
+        Navigator.pushNamed(context, TeamInfoDisplay.route, arguments: {
+          'teamNumber': teamNumber,
+        });
       },
     );
     // set up the AlertDialog
@@ -101,10 +89,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
     return new Scaffold(
       appBar: new Header(
         context,

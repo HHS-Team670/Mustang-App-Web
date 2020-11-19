@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'header.dart';
 import 'bottomnavbar.dart';
 import 'analyzer.dart';
@@ -96,10 +95,6 @@ class _MapScouterState extends State<MapScouter> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
     return Scaffold(
       appBar: Header(context, 'Map'),
       body: Container(
