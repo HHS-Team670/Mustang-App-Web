@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mustang_app/constants.dart';
 import 'package:mustang_app/header.dart';
 
 class TeamInfoDisplay extends StatefulWidget {
@@ -29,7 +30,7 @@ class _TeamInfoDisplayState extends State<TeamInfoDisplay> {
   }
 
   Future<void> getData() async {
-    QuerySnapshot matchData = await Firestore.instance
+    QuerySnapshot matchData = await Constants.db
         .collection('teams')
         .document(_team)
         .collection('matches')
@@ -41,7 +42,7 @@ class _TeamInfoDisplayState extends State<TeamInfoDisplay> {
     });
 
     DocumentSnapshot data =
-        await Firestore.instance.collection('teams').document(_team).get();
+        await Constants.db.collection('teams').document(_team).get();
     _pitData = data.data;
   }
 

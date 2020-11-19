@@ -1,7 +1,19 @@
-import 'teamanalyzer.dart';
+import 'package:flutter/material.dart';
+import 'teamdataanalyzer.dart';
 
-class Analyzer {
-  bool _initialized = false;
+class Analyzer extends StatefulWidget {
+  String _teamNum;
+  Analyzer(String teamNum) {
+    _teamNum = teamNum;
+  }
+  @override
+  State<StatefulWidget> createState() {
+    return AnalyzerState(_teamNum);
+  }
+}
+
+class AnalyzerState extends State<Analyzer> {
+  bool _initialized = false, _hasAnalysis = true;
   String _teamNum;
   double _noDGames = 0,
       _lightDGames = 0,
@@ -37,62 +49,72 @@ class Analyzer {
     -> while rank isn't subjective, the way people interpret a rank is. However, since scouting with a subjective no/light/heavy system, it's important to take actual experience and observations into consideration as well
 	 */
 
-  Analyzer(String teamNum) {
+  AnalyzerState(String teamNum) {
     _teamNum = teamNum;
-    init().then((_) => _initialized = true);
+    if (teamNum.length > 0) {
+      init().then((_) => setState(() => _initialized = true));
+    }
   }
 
   Future<void> init() async {
+    setState(() {
+      _hasAnalysis = TeamDataAnalyzer.getTeamDoc(_teamNum)['hasAnalysis'];
+    });
+    if (!_hasAnalysis) {
+      return;
+    }
     Map<String, double> noD =
-        await TeamAnalyzer.getTeamTargetAverages(_teamNum, "None");
+        await TeamDataAnalyzer.getTeamTargetAverages(_teamNum, "None");
     Map<String, double> lightD =
-        await TeamAnalyzer.getTeamTargetAverages(_teamNum, "Light");
+        await TeamDataAnalyzer.getTeamTargetAverages(_teamNum, "Light");
     Map<String, double> heavyD =
-        await TeamAnalyzer.getTeamTargetAverages(_teamNum, "Heavy");
+        await TeamDataAnalyzer.getTeamTargetAverages(_teamNum, "Heavy");
 
     //initialize all vars
-    _noDGames = await TeamAnalyzer.getTotalNoDGames(_teamNum, "None");
-    _noDPts = noD["Tele Balls [Low]"] +
-        noD["Tele Balls [1]"] +
-        noD["Tele Balls [2/3]"] +
-        noD["Tele Balls [4]"] +
-        noD["Tele Balls [5]"] +
-        noD["Tele Balls [6]"];
+    double tempnoDGames =
+        await TeamDataAnalyzer.getTotalNoDGames(_teamNum, "None");
+    double templightDGames =
+        await TeamDataAnalyzer.getTotalNoDGames(_teamNum, "Light");
+    double tempheavyDGames =
+        await TeamDataAnalyzer.getTotalNoDGames(_teamNum, "Heavy");
+    setState(() {
+      _noDGames = tempnoDGames;
+      _lightDGames = templightDGames;
+      _heavyDGames = tempheavyDGames;
+      _noDPts = noD["teleBallsLow"] +
+          noD["teleBalls1"] +
+          noD["teleBalls23"] +
+          noD["teleBalls4"] +
+          noD["teleBalls5"] +
+          noD["teleBalls6"];
 
-    _lightDGames = await TeamAnalyzer.getTotalNoDGames(_teamNum, "Light");
-    _lightDPts = lightD["Tele Balls [Low]"] +
-        lightD["Tele Balls [1]"] +
-        lightD["Tele Balls [2/3]"] +
-        lightD["Tele Balls [4]"] +
-        lightD["Tele Balls [5]"] +
-        lightD["Tele Balls [6]"];
+      _lightDPts = lightD["teleBallsLow"] +
+          lightD["teleBalls1"] +
+          lightD["teleBalls23"] +
+          lightD["teleBalls4"] +
+          lightD["teleBalls5"] +
+          lightD["teleBalls6"];
 
-    _heavyDGames = await TeamAnalyzer.getTotalNoDGames(_teamNum, "Heavy");
-    _heavyDPts = heavyD["Tele Balls [Low]"] +
-        heavyD["Tele Balls [1]"] +
-        heavyD["Tele Balls [2/3]"] +
-        heavyD["Tele Balls [4]"] +
-        heavyD["Tele Balls [5]"] +
-        heavyD["Tele Balls [6]"];
+      _heavyDPts = heavyD["teleBallsLow"] +
+          heavyD["teleBalls1"] +
+          heavyD["teleBalls23"] +
+          heavyD["teleBalls4"] +
+          heavyD["teleBalls5"] +
+          heavyD["teleBalls6"];
 
-    _zone0Pts = noD["Tele Balls [Low]"] +
-        lightD["Tele Balls [Low]"] +
-        heavyD["Tele Balls [Low]"];
-    _zone1Pts = noD["Tele Balls [1]"] +
-        lightD["Tele Balls [1]"] +
-        heavyD["Tele Balls [1]"];
-    _zone2and3Pts = noD["Tele Balls [2/3]"] +
-        lightD["Tele Balls [2/3]"] +
-        heavyD["Tele Balls [2/3]"];
-    _zone4Pts = noD["Tele Balls [4]"] +
-        lightD["Tele Balls [4]"] +
-        heavyD["Tele Balls [4]"];
-    _zone5Pts = noD["Tele Balls [5]"] +
-        lightD["Tele Balls [5]"] +
-        heavyD["Tele Balls [5]"];
-    _zone6Pts = noD["Tele Balls [6]"] +
-        lightD["Tele Balls [6]"] +
-        heavyD["Tele Balls [6]"];
+      _zone0Pts =
+          noD["teleBallsLow"] + lightD["teleBallsLow"] + heavyD["teleBallsLow"];
+      _zone1Pts =
+          noD["teleBalls1"] + lightD["teleBalls1"] + heavyD["teleBalls1"];
+      _zone2and3Pts =
+          noD["teleBalls23"] + lightD["teleBalls23"] + heavyD["teleBalls23"];
+      _zone4Pts =
+          noD["teleBalls4"] + lightD["teleBalls4"] + heavyD["teleBalls4"];
+      _zone5Pts =
+          noD["teleBalls5"] + lightD["teleBalls5"] + heavyD["teleBalls5"];
+      _zone6Pts =
+          noD["teleBalls6"] + lightD["teleBalls6"] + heavyD["teleBalls6"];
+    });
   }
 
   String getReport() {
@@ -115,34 +137,37 @@ class Analyzer {
   }
 
   double calculateRank() {
-    _noPtAvg = _noDPts / _noDGames;
-    _lightPtAvg = _lightDPts / _lightDGames;
-    _heavyPtAvg = _heavyDPts / _heavyDGames;
+    setState(() {
+      _noPtAvg = _noDPts / _noDGames;
+      _lightPtAvg = _lightDPts / _lightDGames;
+      _heavyPtAvg = _heavyDPts / _heavyDGames;
 
-    //defense is useless, rank = 1
-    if (_noPtAvg < _lightPtAvg ||
-        _noPtAvg < _heavyPtAvg ||
-        _lightPtAvg < _heavyPtAvg) {
-      _rank = 1;
-      return 1;
-    }
-
-    //finds rank of light defense compared to no defense
-    for (int i = 1; i < _highestRankPossible; i++) {
-      if (_noPtAvg - _lightPtAvg > _ptRankDiff * i) {
-        _noToLightRank++;
+      //defense is useless, rank = 1
+      if (_noPtAvg < _lightPtAvg ||
+          _noPtAvg < _heavyPtAvg ||
+          _lightPtAvg < _heavyPtAvg) {
+        _rank = 1;
+        return 1;
       }
-    }
 
-    //finds rank of heavy defense compared to light defense
-    for (int i = 1; i < _highestRankPossible; i++) {
-      if (_lightPtAvg - _heavyPtAvg > _ptRankDiff * i) {
-        _lightToHeavyRank++;
+      //finds rank of light defense compared to no defense
+      for (int i = 1; i < _highestRankPossible; i++) {
+        if (_noPtAvg - _lightPtAvg > _ptRankDiff * i) {
+          _noToLightRank++;
+        }
       }
-    }
 
-    //finds rank average of no->light defense and light->heavy defense
-    _rank = (_noToLightRank + _lightToHeavyRank) / 2.0;
+      //finds rank of heavy defense compared to light defense
+      for (int i = 1; i < _highestRankPossible; i++) {
+        if (_lightPtAvg - _heavyPtAvg > _ptRankDiff * i) {
+          _lightToHeavyRank++;
+        }
+      }
+
+      //finds rank average of no->light defense and light->heavy defense
+      _rank = (_noToLightRank + _lightToHeavyRank) / 2.0;
+    });
+
     return _rank;
   }
 
@@ -219,18 +244,16 @@ class Analyzer {
     return calculateTotPts() / calculateTotGames();
   }
 
-  void addNoDGame(int noDPts) {
-    _noDGames++;
-    _noDPts += noDPts;
-  }
-
-  void addLightDGame(int lightDPts) {
-    _lightDGames++;
-    _lightDPts += lightDPts;
-  }
-
-  void addHeavyDGame(int heavyDPoints) {
-    _heavyDGames++;
-    _heavyDPts += heavyDPoints;
+  @override
+  Widget build(BuildContext context) {
+    if (_initialized) {
+      return Text(this.getReport());
+    } else if (!_hasAnalysis) {
+      return Text('No Analysis For This Team =(');
+    } else if (_teamNum.isEmpty) {
+      return Text('Error! No Team Number Entered');
+    } else {
+      return Text('Loading...');
+    }
   }
 }

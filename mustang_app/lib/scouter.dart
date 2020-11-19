@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/pitscouting.dart';
-
+import 'package:flutter/services.dart';
 import './header.dart';
 import './autonscouting.dart';
 import './bottomnavbar.dart';
@@ -84,6 +84,10 @@ class _ScouterState extends State<Scouter> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       appBar: Header(
         context,

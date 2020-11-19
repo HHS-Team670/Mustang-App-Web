@@ -4,12 +4,13 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'constants.dart';
 
-class TeamAnalyzer {
+class TeamDataAnalyzer {
   static Map<String, Map<String, dynamic>> _teamAverages = {};
-  static List<String> _teams = [];
-  static Firestore _db = Firestore.instance;
+  static List<String> _teamNumbers = [];
   static bool _initialized = false;
+  static List<DocumentSnapshot> _teams = [];
 
   static const List<String> keys = [
     'startingLocation',
@@ -34,6 +35,8 @@ class TeamAnalyzer {
   ];
 
   static Future<void> init() async {
+    _teamNumbers = await getTeamNumbers();
+
     _teamAverages = await calcAverages();
     _initialized = true;
   }
@@ -47,15 +50,37 @@ class TeamAnalyzer {
   }
 
   static List<String> get teams {
+    return _teamNumbers;
+  }
+
+  static List<String> get teamNumbers {
+    return _teamNumbers;
+  }
+
+  static List<DocumentSnapshot> get teamDocs {
     return _teams;
+  }
+
+  static DocumentSnapshot getTeamDoc(String teamNumber) {
+    return _teams.where((element) => element.documentID == teamNumber).first;
+  }
+
+  static Future<List<String>> getTeamNumbers() async {
+    _teams = (await Constants.db.collection('teams').getDocuments()).documents;
+    List<String> numbers = [];
+    _teams.forEach((team) {
+      numbers.add(team.documentID);
+    });
+    return numbers;
   }
 
   static Map<String, double> getTeamAverage(String teamNumber) {
     return _teamAverages[teamNumber];
   }
 
-  static Future<Map<String, double>> calcTeamAverages(String teamNumber) async {
-    QuerySnapshot matches = await _db
+  static Future<Map<String, dynamic>> calcTeamAverages(
+      String teamNumber) async {
+    QuerySnapshot matches = await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -73,14 +98,14 @@ class TeamAnalyzer {
       });
     });
     if (matches.documents.length == 0) {
-      return totals.map((key, value) => MapEntry(key, value.toDouble()));
+      return totals.map((key, value) => MapEntry(key, 'n/a'));
     }
     return totals
         .map((key, value) => MapEntry(key, (value / matches.documents.length)));
   }
 
   static Future<String> getCommonStartLocation(String teamNumber) async {
-    QuerySnapshot matches = await _db
+    QuerySnapshot matches = await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -111,7 +136,7 @@ class TeamAnalyzer {
   }
 
   static Future<String> getCommonEndLocation(String teamNumber) async {
-    QuerySnapshot matches = await _db
+    QuerySnapshot matches = await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -145,7 +170,7 @@ class TeamAnalyzer {
 
   static Future<double> getTotalNoDGames(
       String teamNumber, String targetType) async {
-    QuerySnapshot matches = await _db
+    QuerySnapshot matches = await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -162,7 +187,7 @@ class TeamAnalyzer {
 
   static Future<Map<String, dynamic>> getTeamTargetAverages(
       String teamNumber, String targetType) async {
-    QuerySnapshot matches = await _db
+    QuerySnapshot matches = await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -181,16 +206,16 @@ class TeamAnalyzer {
       });
     });
     if (matches.documents.length == 0) {
-      return totals.map((key, value) => MapEntry(key, value.toDouble()));
+      return totals.map((key, value) => MapEntry(key, 'n/a'));
     }
     return totals
         .map((key, value) => MapEntry(key, (value / matches.documents.length)));
   }
 
-  static Future<Map<String, Map<String, double>>> calcAverages() async {
-    QuerySnapshot teams = await _db
+  static Future<Map<String, Map<String, dynamic>>> calcAverages() async {
+    QuerySnapshot teams = await Constants.db
         .collection('teams')
-        .where('hasAnalysis', isEqualTo: true)
+        // .where('hasAnalysis', isEqualTo: true)
         .getDocuments();
     Map<String, Map<String, double>> averages = {};
     for (int i = 0; i < teams.documents.length; i++) {

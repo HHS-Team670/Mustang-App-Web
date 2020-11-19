@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'teamanalyzer.dart';
 import './bottomnavbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   HomePage() {
-    TeamAnalyzer.init();
+    print("HELLLO: " + (Firestore.instance == null).toString());
   }
   @override
   State<StatefulWidget> createState() {
@@ -15,6 +16,10 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),

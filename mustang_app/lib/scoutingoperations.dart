@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mustang_app/constants.dart';
 
 class ScoutingOperations {
-  Firestore db;
   List<String> teamnames = new List<String>();
   final keys = [
     'autoBallsLow',
@@ -18,12 +18,8 @@ class ScoutingOperations {
     'teleBalls6',
   ];
 
-  ScoutingOperations() {
-    db = Firestore.instance;
-  }
-
   Future<void> startPitScouting(String teamNumber, String names) async {
-    await db.collection('teams').document(teamNumber).setData({
+    await Constants.db.collection('teams').document(teamNumber).setData({
       'driveBaseType': "",
       'innerPort': false,
       'outerPort': false,
@@ -47,7 +43,7 @@ class ScoutingOperations {
       leveller,
       String notes,
       drivebaseType}) async {
-    await db.collection('teams').document(teamNumber).updateData({
+    await Constants.db.collection('teams').document(teamNumber).updateData({
       'driveBaseType': drivebaseType,
       'innerPort': inner,
       'outerPort': outer,
@@ -62,13 +58,13 @@ class ScoutingOperations {
 
   Future<void> startNewMatch(
       String teamNumber, String matchNumber, String names) async {
-    DocumentReference matchDoc = db
+    DocumentReference matchDoc = Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
         .document(matchNumber);
 
-    await db.collection('teams').document(teamNumber).updateData({
+    await Constants.db.collection('teams').document(teamNumber).updateData({
       'names': names,
     });
     await matchDoc.setData({
@@ -137,7 +133,7 @@ class ScoutingOperations {
     int totalPoints = bottomPort * 2 + outerPort * 4 + innerPort * 6;
     totalPoints += crossedLine ? 5 : 0;
 
-    await db
+    await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -171,7 +167,7 @@ class ScoutingOperations {
     totalPoints += rotationControl ? 10 : 0;
     totalPoints += rotationControl ? 20 : 0;
 
-    await db
+    await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -206,7 +202,7 @@ class ScoutingOperations {
       totalPoints += 5;
     else if (endState == 'Hanging') totalPoints += 25;
 
-    await db
+    await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -229,7 +225,7 @@ class ScoutingOperations {
 
   Future<void> updateMatchDataEnd(String teamNumber, String matchNumber,
       {String matchResult, int fouls, String finalComments}) async {
-    await db
+    await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -247,7 +243,7 @@ class ScoutingOperations {
 
   Future<void> updateMatchDataSummary(
       String teamNumber, String matchNumber) async {
-    DocumentSnapshot dataSnapshot = await db
+    DocumentSnapshot dataSnapshot = await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -270,7 +266,7 @@ class ScoutingOperations {
     }
     // if (int.parse(summary['stagesCompleted'].toString()) == 3)
     //   rp += 1;
-    await db
+    await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
@@ -325,7 +321,7 @@ class ScoutingOperations {
       'notes': "",
       'names': "",
     };
-    return await db
+    return await Constants.db
         .collection('teams')
         .document(teamNumber)
         .get()
@@ -393,7 +389,7 @@ class ScoutingOperations {
         'stagesCompleted': 0,
       }
     };
-    return await db
+    return await Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')

@@ -4,6 +4,8 @@ import 'mapscouter.dart';
 import 'bottomnavbar.dart';
 import 'teaminfodisplay.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'teamdataanalyzer.dart';
 
 class SearchPage extends StatefulWidget {
   static const String route = './Search';
@@ -24,12 +26,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> initAllTeams() async {
-    QuerySnapshot docs =
-        await Firestore.instance.collection('teams').getDocuments();
-    List<String> allTeams = [];
-    docs.documents.forEach((f) {
-      allTeams.add(f.documentID);
-    });
+    List<String> allTeams = await TeamDataAnalyzer.getTeamNumbers();
     setState(() {
       teams = allTeams;
       tempSearchStore = allTeams;
@@ -108,6 +105,10 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     return new Scaffold(
       appBar: new Header(
         context,
