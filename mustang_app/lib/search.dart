@@ -19,14 +19,10 @@ class _SearchPageState extends State<SearchPage> {
   List<String> tempSearchStore = [];
   TextEditingController _queryController = new TextEditingController();
 
-  _SearchPageState() {
-    initAllTeams().then((value) {
-      setState(() {});
-    });
-  }
-
-  Future<void> initAllTeams() async {
-    List<String> allTeams = await TeamDataAnalyzer.getTeamNumbers();
+  @override
+  void initState() {
+    super.initState();
+    List<String> allTeams = TeamDataAnalyzer.teamNumbers;
     setState(() {
       teams = allTeams;
       tempSearchStore = allTeams;

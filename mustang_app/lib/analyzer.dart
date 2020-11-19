@@ -51,12 +51,13 @@ class AnalyzerState extends State<Analyzer> {
 
   AnalyzerState(String teamNum) {
     _teamNum = teamNum;
-    if (teamNum.length > 0) {
-      init().then((_) => setState(() => _initialized = true));
-    }
   }
 
-  Future<void> init() async {
+  void initState() {
+    super.initState();
+    if (_teamNum.isEmpty) {
+      return;
+    }
     // setState(() {
     _hasAnalysis = TeamDataAnalyzer.getTeamDoc(_teamNum)['hasAnalysis'];
     // });
@@ -64,19 +65,18 @@ class AnalyzerState extends State<Analyzer> {
       return;
     }
     Map<String, double> noD =
-        await TeamDataAnalyzer.getTeamTargetAverages(_teamNum, "None");
+        TeamDataAnalyzer.getTeamTargetAverages(_teamNum, "None");
     Map<String, double> lightD =
-        await TeamDataAnalyzer.getTeamTargetAverages(_teamNum, "Light");
+        TeamDataAnalyzer.getTeamTargetAverages(_teamNum, "Light");
     Map<String, double> heavyD =
-        await TeamDataAnalyzer.getTeamTargetAverages(_teamNum, "Heavy");
+        TeamDataAnalyzer.getTeamTargetAverages(_teamNum, "Heavy");
 
     //initialize all vars
-    double tempnoDGames =
-        await TeamDataAnalyzer.getTotalNoDGames(_teamNum, "None");
+    double tempnoDGames = TeamDataAnalyzer.getTotalNoDGames(_teamNum, "None");
     double templightDGames =
-        await TeamDataAnalyzer.getTotalNoDGames(_teamNum, "Light");
+        TeamDataAnalyzer.getTotalNoDGames(_teamNum, "Light");
     double tempheavyDGames =
-        await TeamDataAnalyzer.getTotalNoDGames(_teamNum, "Heavy");
+        TeamDataAnalyzer.getTotalNoDGames(_teamNum, "Heavy");
     setState(() {
       _noDGames = tempnoDGames;
       _lightDGames = templightDGames;
@@ -114,6 +114,7 @@ class AnalyzerState extends State<Analyzer> {
           noD["teleBalls5"] + lightD["teleBalls5"] + heavyD["teleBalls5"];
       _zone6Pts =
           noD["teleBalls6"] + lightD["teleBalls6"] + heavyD["teleBalls6"];
+      _initialized = true;
     });
   }
 

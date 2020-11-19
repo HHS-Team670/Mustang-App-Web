@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -13,7 +12,7 @@ class TeamDataAnalyzer {
   static List<String> _teamNumbers = [];
   static bool _initialized = false;
   static List<DocumentSnapshot> _teams = [];
-
+  static List<DocumentSnapshot> _matches = [];
   static const List<String> keys = [
     'autoBallsLow',
     'autoBalls1',
@@ -30,10 +29,34 @@ class TeamDataAnalyzer {
   ];
 
   static Future<void> init() async {
-    _teamNumbers = await getTeamNumbers();
-
-    _teamAverages = await calcAverages();
+    _teams = (await Constants.db.collection('teams').getDocuments()).documents;
+    _matches = (await Constants.db.collectionGroup('matches').getDocuments())
+        .documents;
+    _updateTeamNumbers();
+    _calcAverages();
     _initialized = true;
+    Constants.db.collection('teams').snapshots().listen((event) {
+      event.documentChanges.forEach((element) {
+        print('NEW DOC ADDED: ' + element.document.reference.path);
+      });
+      _teams = event.documents;
+      _updateTeamNumbers();
+      _calcAverages();
+    });
+    Constants.db.collectionGroup('matches').snapshots().listen((event) {
+      _matches = event.documents;
+      _updateTeamNumbers();
+      _calcAverages();
+    });
+  }
+
+  static Future<void> refresh() async {
+    _initialized = false;
+    _teams = (await Constants.db.collection('teams').getDocuments()).documents;
+    _matches = (await Constants.db.collectionGroup('matches').getDocuments())
+        .documents;
+    _updateTeamNumbers();
+    _calcAverages();
   }
 
   static bool get initialized {
@@ -56,30 +79,46 @@ class TeamDataAnalyzer {
     return _teams;
   }
 
-  static DocumentSnapshot getTeamDoc(String teamNumber) {
-    return _teams.where((element) => element.documentID == teamNumber).first;
+  static List<DocumentSnapshot> get matchDocs {
+    return _matches;
   }
 
-  static Future<List<String>> getTeamNumbers() async {
-    _teams = (await Constants.db.collection('teams').getDocuments()).documents;
+  static DocumentSnapshot getTeamDoc(String teamNumber) {
+    return _teams
+        .where((element) => element.documentID == teamNumber)
+        .toList()
+        .first;
+  }
+
+  static List<DocumentSnapshot> getMatchDocs(String teamNumber) {
+    return _matches
+        .where((element) => element.data['teamNumber'] == teamNumber)
+        .toList();
+  }
+
+  static DocumentSnapshot getMatch(String teamNumber, String matchNumber) {
+    return _matches
+        .where((element) =>
+            element.data['teamNumber'] == teamNumber &&
+            element.documentID == matchNumber)
+        .toList()
+        .first;
+  }
+
+  static void _updateTeamNumbers() async {
     List<String> numbers = [];
     _teams.forEach((team) {
       numbers.add(team.documentID);
     });
-    return numbers;
+    _teamNumbers = numbers;
   }
 
   static Map<String, double> getTeamAverage(String teamNumber) {
     return _teamAverages[teamNumber];
   }
 
-  static Future<Map<String, double>> calcTeamAverages(
-      String teamNumber, hasAnalysis) async {
-    QuerySnapshot matches = await Constants.db
-        .collection('teams')
-        .document(teamNumber)
-        .collection('matches')
-        .getDocuments();
+  static Map<String, double> _calcTeamAverages(String teamNumber, hasAnalysis) {
+    List<DocumentSnapshot> matches = getMatchDocs(teamNumber);
 
     Map<String, int> totals = {};
     keys.forEach((key) {
@@ -88,23 +127,20 @@ class TeamDataAnalyzer {
     if (!hasAnalysis) {
       return totals.map((key, value) => MapEntry(key, -1));
     }
-    matches.documents.forEach((match) {
+    matches.forEach((match) {
       keys.forEach((key) {
         totals[key] = totals[key] + match.data[key];
       });
     });
 
-    return totals
-        .map((key, value) => MapEntry(key, (value / matches.documents.length)));
+    return totals.map((key, value) => MapEntry(key, (value / matches.length)));
   }
 
-  static Future<String> getCommonStartLocation(String teamNumber) async {
-    QuerySnapshot matches = await Constants.db
-        .collection('teams')
-        .document(teamNumber)
-        .collection('matches')
-        .where('hasAnalysis', isEqualTo: true)
-        .getDocuments();
+  static String getCommonStartLocation(String teamNumber) {
+    List<DocumentSnapshot> matches = getMatchDocs(teamNumber)
+        .where((element) => element.data['hasAnalysis'])
+        .toList();
+
     Map<String, int> counters = {
       "Inline with Opposing Trench": 0,
       "Right of Goal": 0,
@@ -114,7 +150,7 @@ class TeamDataAnalyzer {
       'n/a': 0,
     };
 
-    matches.documents.forEach((element) {
+    matches.forEach((element) {
       String key = element.data['startingLocation'];
       counters[key] = counters[key] + 1;
     });
@@ -129,13 +165,10 @@ class TeamDataAnalyzer {
     return loc;
   }
 
-  static Future<String> getCommonEndLocation(String teamNumber) async {
-    QuerySnapshot matches = await Constants.db
-        .collection('teams')
-        .document(teamNumber)
-        .collection('matches')
-        .where('hasAnalysis', isEqualTo: true)
-        .getDocuments();
+  static String getCommonEndLocation(String teamNumber) {
+    List<DocumentSnapshot> matches = getMatchDocs(teamNumber)
+        .where((element) => element.data['hasAnalysis'])
+        .toList();
 
     Map<String, int> counters = {
       "Auto Line": 0,
@@ -147,7 +180,7 @@ class TeamDataAnalyzer {
       'n/a': 0,
     };
 
-    matches.documents.forEach((element) {
+    matches.forEach((element) {
       String key = element.data['autoEndLocation'];
       counters[key] = counters[key] + 1;
     });
@@ -162,16 +195,13 @@ class TeamDataAnalyzer {
     return loc;
   }
 
-  static Future<double> getTotalNoDGames(
-      String teamNumber, String targetType) async {
-    QuerySnapshot matches = await Constants.db
-        .collection('teams')
-        .document(teamNumber)
-        .collection('matches')
-        .where('hasAnalysis', isEqualTo: true)
-        .getDocuments();
+  static double getTotalNoDGames(String teamNumber, String targetType) {
+    List<DocumentSnapshot> matches = getMatchDocs(teamNumber)
+        .where((element) => element.data['hasAnalysis'])
+        .toList();
+
     double counter = 0;
-    matches.documents.forEach((element) {
+    matches.forEach((element) {
       if (element.data['target'] == targetType) {
         counter++;
       }
@@ -179,45 +209,37 @@ class TeamDataAnalyzer {
     return counter;
   }
 
-  static Future<Map<String, double>> getTeamTargetAverages(
-      String teamNumber, String targetType) async {
-    QuerySnapshot matches = await Constants.db
-        .collection('teams')
-        .document(teamNumber)
-        .collection('matches')
-        .where('hasAnalysis', isEqualTo: true)
-        .where('target', isEqualTo: targetType)
-        .getDocuments();
+  static Map<String, double> getTeamTargetAverages(
+      String teamNumber, String targetType) {
+    List<DocumentSnapshot> matches = getMatchDocs(teamNumber)
+        .where((element) =>
+            element.data['hasAnalysis'] && element.data['target'] == targetType)
+        .toList();
 
     Map<String, int> totals = {};
     keys.forEach((key) {
       totals[key] = 0;
     });
 
-    matches.documents.forEach((match) {
+    matches.forEach((match) {
       keys.forEach((key) {
         totals[key] = totals[key] + match.data[key];
       });
     });
-    if (matches.documents.length == 0) {
+    if (matches.length == 0) {
       return totals.map((key, value) => MapEntry(key, -1));
     }
-    return totals
-        .map((key, value) => MapEntry(key, (value / matches.documents.length)));
+    return totals.map((key, value) => MapEntry(key, (value / matches.length)));
   }
 
-  static Future<Map<String, Map<String, dynamic>>> calcAverages() async {
-    QuerySnapshot teams = await Constants.db
-        .collection('teams')
-        // .where('hasAnalysis', isEqualTo: true)
-        .getDocuments();
+  static void _calcAverages() {
     Map<String, Map<String, double>> averages = {};
-    for (int i = 0; i < teams.documents.length; i++) {
-      DocumentSnapshot team = teams.documents[i];
+    for (int i = 0; i < _teams.length; i++) {
+      DocumentSnapshot team = _teams[i];
       averages[team.documentID] =
-          await calcTeamAverages(team.documentID, team.data['hasAnalysis']);
+          _calcTeamAverages(team.documentID, team.data['hasAnalysis']);
     }
-    return averages;
+    _teamAverages = averages;
   }
 
   static Future<StorageTaskSnapshot> exportDB() async {
@@ -241,7 +263,6 @@ class TeamDataAnalyzer {
     });
 
     File updated = await file.writeAsString(jsonEncode(data));
-    // File updated = await file.writeAsString("hello");
     return ref.putFile(updated).onComplete;
   }
 

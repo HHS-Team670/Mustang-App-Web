@@ -29,6 +29,7 @@ class ScoutingOperations {
       'climber': false,
       'leveller': false,
       'notes': "",
+      'hasAnalysis': false,
       'names': names,
     }, merge: true);
   }
