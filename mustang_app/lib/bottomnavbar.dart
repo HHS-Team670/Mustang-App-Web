@@ -19,6 +19,10 @@ class BottomNavBar extends BottomNavigationBar {
     SketchPage.route,
   ];
 
+  static void setSelected(String route) {
+    _selectedIndex = routes.indexOf(route);
+  }
+
   BottomNavBar(BuildContext context)
       : super(
           type: BottomNavigationBarType.fixed,

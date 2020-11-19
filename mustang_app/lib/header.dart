@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mustang_app/bottomnavbar.dart';
 
 class Header extends AppBar {
   Header(BuildContext context, String text)
@@ -13,6 +14,7 @@ class Header extends AppBar {
                 icon: Icon(Icons.home),
                 onPressed: () {
                   Navigator.pushNamed(context, '/');
+                  BottomNavBar.setSelected('/');
                 },
               ),
             )

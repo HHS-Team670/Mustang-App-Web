@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mustang_app/constants.dart';
+import 'package:mustang_app/teamdataanalyzer.dart';
 
 class ScoutingOperations {
   List<String> teamnames = new List<String>();
@@ -59,15 +60,17 @@ class ScoutingOperations {
 
   Future<void> startNewMatch(
       String teamNumber, String matchNumber, String names) async {
+    if (!TeamDataAnalyzer.teams.contains(teamNumber)) {
+      await Constants.db
+          .collection('teams')
+          .document(teamNumber)
+          .setData({'hasAnalysis': false, 'names': names});
+    }
     DocumentReference matchDoc = Constants.db
         .collection('teams')
         .document(teamNumber)
         .collection('matches')
         .document(matchNumber);
-
-    await Constants.db.collection('teams').document(teamNumber).updateData({
-      'names': names,
-    });
     await matchDoc.setData({
       'auton': {
         'bottomPort': 0,

@@ -15,7 +15,8 @@ class PostScouter extends StatelessWidget {
           'Finished!',
         ),
         body: Center(
-          child: ListView(
+            child: SingleChildScrollView(
+          child: Column(
             children: <Widget>[
               Container(
                 margin:
@@ -65,6 +66,6 @@ class PostScouter extends StatelessWidget {
               ),
             ],
           ),
-        ));
+        )));
   }
 }
