@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/sketcher.dart';
 
-import './calendar.dart';
-import './scouter.dart';
-import './search.dart';
+import 'calendar.dart';
+import 'scouter.dart';
+import 'search.dart';
 import 'mapscouter.dart';
 import 'mapscouterkey.dart';
 

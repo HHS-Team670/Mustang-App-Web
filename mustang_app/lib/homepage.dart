@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './bottomnavbar.dart';
+import 'bottomnavbar.dart';
 import 'package:flutter/services.dart';
 import 'teamdataanalyzer.dart';
 

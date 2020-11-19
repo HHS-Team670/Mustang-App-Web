@@ -36,9 +36,7 @@ class TeamDataAnalyzer {
     _calcAverages();
     _initialized = true;
     Constants.db.collection('teams').snapshots().listen((event) {
-      event.documentChanges.forEach((element) {
-        print('NEW DOC ADDED: ' + element.document.reference.path);
-      });
+      event.documentChanges.forEach((element) {});
       _teams = event.documents;
       _updateTeamNumbers();
       _calcAverages();
@@ -274,7 +272,6 @@ class TeamDataAnalyzer {
     int lineCounter = 1;
     List<String> dataKeys = lines[0].split(',').map((e) => e.trim()).toList();
     while (lineCounter < lines.length) {
-      print('Updating... ' + lineCounter.toString());
       List<String> values =
           lines[lineCounter].split(',').map((e) => e.trim()).toList();
       String teamNumber = values[1], matchNumber = values[0];

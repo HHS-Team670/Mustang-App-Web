@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/services.dart';
-import './header.dart';
-import './bottomnavbar.dart';
+import 'header.dart';
+import 'bottomnavbar.dart';
 
 class Calendar extends StatefulWidget {
   static const String route = '/Calendar';
@@ -71,16 +71,13 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   }
 
   void _onDaySelected(DateTime day, List events) {
-    print('CALLBACK: _onDaySelected');
     setState(() {
       _selectedEvents = events;
     });
   }
 
   void _onVisibleDaysChanged(
-      DateTime first, DateTime last, CalendarFormat format) {
-    print('CALLBACK: _onVisibleDaysChanged');
-  }
+      DateTime first, DateTime last, CalendarFormat format) {}
 
   @override
   Widget build(BuildContext context) {

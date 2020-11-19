@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/postscouter.dart';
 
-import './header.dart';
-import './scoutingoperations.dart';
-import './counter.dart';
+import 'header.dart';
+import 'scoutingoperations.dart';
+import 'counter.dart';
 
 class PitScouter extends StatefulWidget {
   static const String route = '/PitScouter';

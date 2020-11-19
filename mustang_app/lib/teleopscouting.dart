@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/counter.dart';
 
-import './endgamescouting.dart';
-import './header.dart';
-import './scoutingoperations.dart';
+import 'endgamescouting.dart';
+import 'header.dart';
+import 'scoutingoperations.dart';
 
 class TeleopScouter extends StatefulWidget {
   static const String route = '/TeleopScouter';

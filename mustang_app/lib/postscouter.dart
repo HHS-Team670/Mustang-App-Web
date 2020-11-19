@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import './header.dart';
-import './calendar.dart';
-import './scouter.dart';
+import 'header.dart';
+import 'calendar.dart';
+import 'scouter.dart';
 
 class PostScouter extends StatelessWidget {
   static const String route = '/PostScouter';
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: Header(

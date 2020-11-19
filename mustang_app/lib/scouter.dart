@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/pitscouting.dart';
 import 'package:flutter/services.dart';
-import './header.dart';
-import './autonscouting.dart';
-import './bottomnavbar.dart';
-import './scoutingoperations.dart';
+import 'header.dart';
+import 'autonscouting.dart';
+import 'bottomnavbar.dart';
+import 'scoutingoperations.dart';
 
 class Scouter extends StatefulWidget {
   static const String route = '/Scouter';

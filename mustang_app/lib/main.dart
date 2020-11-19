@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'mapscouter.dart';
 import 'mapscouterkey.dart';
-import './calendar.dart';
-import './scouter.dart';
-import './search.dart';
-import './homepage.dart';
-import './sketcher.dart';
+import 'calendar.dart';
+import 'scouter.dart';
+import 'search.dart';
+import 'homepage.dart';
+import 'sketcher.dart';
+import 'autonscouting.dart';
+import 'teleopscouting.dart';
+import 'endgamescouting.dart';
+import 'postscouter.dart';
+import 'matchendscouting.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,11 +19,12 @@ class MyApp extends StatelessWidget {
   static final Map<String, WidgetBuilder> routes = {
     Calendar.route: (BuildContext context) => new Calendar(),
     Scouter.route: (BuildContext context) => new Scouter(),
-    // AutonScouter.route: (BuildContext context) => new AutonScouter(),
-    // TeleopScouter.route: (BuildContext context) => new TeleopScouter(),
-    // EndgameScouter.route: (BuildContext context) => new EndgameScouter(),
-    // MatchEndScouter.route: (BuildContext context) => new MatchEndScouter(),
-    // PostScouter.route: (BuildContext context) => new PostScouter(),
+    AutonScouter.route: (BuildContext context) => new AutonScouter("", ""),
+    TeleopScouter.route: (BuildContext context) => new TeleopScouter("", ""),
+    EndgameScouter.route: (BuildContext context) => new EndgameScouter("", ""),
+    MatchEndScouter.route: (BuildContext context) =>
+        new MatchEndScouter("", ""),
+    PostScouter.route: (BuildContext context) => new PostScouter(),
     SearchPage.route: (BuildContext context) => new SearchPage(),
     MapScouter.route: (BuildContext context) => new MapScouter(),
     MapScouterKey.route: (BuildContext context) => new MapScouterKey(),

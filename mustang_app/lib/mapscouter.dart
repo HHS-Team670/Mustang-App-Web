@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import './header.dart';
-import './bottomnavbar.dart';
-import './analyzer.dart';
+import 'header.dart';
+import 'bottomnavbar.dart';
+import 'analyzer.dart';
 import 'symbolplotter.dart';
 import 'teamdataanalyzer.dart';
 import 'mapscouterkey.dart';
@@ -34,7 +34,6 @@ class _MapScouterState extends State<MapScouter> {
     List<PlotPoint> points = new List<PlotPoint>();
     if (TeamDataAnalyzer.teamAverages[_teamNumber] != null &&
         TeamDataAnalyzer.getTeamDoc(_teamNumber).data['hasAnalysis']) {
-      print('getting points');
       TeamDataAnalyzer.teamAverages[_teamNumber].forEach((key, value) {
         String val = value.toString();
         double x = 0, y = 0, shift = 0, textSize = 15;
@@ -91,8 +90,6 @@ class _MapScouterState extends State<MapScouter> {
           points.add(new PlotPoint((x) + shift, (y), fillColor, val, textSize));
         }
       });
-    } else {
-      print('no points');
     }
     return points;
   }

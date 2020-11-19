@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/counter.dart';
 
-import './header.dart';
-import './teleopscouting.dart';
-import './scoutingoperations.dart';
+import 'header.dart';
+import 'teleopscouting.dart';
+import 'scoutingoperations.dart';
 
 class AutonScouter extends StatefulWidget {
   static const String route = '/AutonScouter';
