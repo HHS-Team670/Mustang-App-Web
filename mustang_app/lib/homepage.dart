@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'datareader.dart';
+import 'teamanalyzer.dart';
 import './bottomnavbar.dart';
 
 class HomePage extends StatefulWidget {
   HomePage() {
-    DataReader.init();
+    TeamAnalyzer.init();
   }
   @override
   State<StatefulWidget> createState() {

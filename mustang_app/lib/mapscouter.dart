@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mustang_app/datareader.dart';
-
 import './header.dart';
 import './bottomnavbar.dart';
 import './analyzer.dart';
-import './mapscouterkey.dart';
 import 'symbolplotter.dart';
 
 class MapScouter extends StatefulWidget {

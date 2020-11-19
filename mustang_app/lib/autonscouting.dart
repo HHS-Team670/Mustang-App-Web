@@ -3,7 +3,7 @@ import 'package:mustang_app/counter.dart';
 
 import './header.dart';
 import './teleopscouting.dart';
-import './databaseoperations.dart';
+import './scoutingoperations.dart';
 
 class AutonScouter extends StatefulWidget {
   static const String route = '/AutonScouter';
@@ -28,7 +28,7 @@ class _AutonScouterState extends State<AutonScouter> {
   Counter _outerPortMissed = Counter('Outer Port Missed');
   Counter _innerPortMissed = Counter('Inner Port Missed');
   bool _crossedInitiationLine = false;
-  DatabaseOperations db = new DatabaseOperations();
+  ScoutingOperations db = new ScoutingOperations();
 
   _AutonScouterState(teamNumber, matchNumber) {
     _teamNumber = teamNumber;

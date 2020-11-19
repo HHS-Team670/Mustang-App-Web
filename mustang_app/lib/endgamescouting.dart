@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mustang_app/counter.dart';
 
 import './matchendscouting.dart';
-import './databaseoperations.dart';
+import './scoutingoperations.dart';
 import './header.dart';
 
 class EndgameScouter extends StatefulWidget {
@@ -29,7 +29,7 @@ class _EndgameScouterState extends State<EndgameScouter> {
   Counter _innerPortMissed = Counter('Inner Port Missed');
   Counter _stagesCompletedController = new Counter('Stages Completed');
   String _endingState;
-  DatabaseOperations db = new DatabaseOperations();
+  ScoutingOperations db = new ScoutingOperations();
 
   _EndgameScouterState(teamNumber, matchNumber) {
     _teamNumber = teamNumber;

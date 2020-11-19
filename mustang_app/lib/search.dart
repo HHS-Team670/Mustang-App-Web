@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/header.dart';
-import 'datareader.dart';
 import 'mapscouter.dart';
 import 'bottomnavbar.dart';
 import 'teaminfodisplay.dart';

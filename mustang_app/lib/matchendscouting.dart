@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/counter.dart';
 
-import './databaseoperations.dart';
+import './scoutingoperations.dart';
 import './header.dart';
 import './postscouter.dart';
 
@@ -25,7 +25,7 @@ class _MatchEndScouterState extends State<MatchEndScouter> {
   TextEditingController _finalCommentsController = TextEditingController();
   Counter _fouls = Counter('Fouls');
   String _matchResult;
-  DatabaseOperations db = new DatabaseOperations();
+  ScoutingOperations db = new ScoutingOperations();
 
   _MatchEndScouterState(teamNumber, matchNumber) {
     _teamNumber = teamNumber;

@@ -3,7 +3,7 @@ import 'package:mustang_app/counter.dart';
 
 import './endgamescouting.dart';
 import './header.dart';
-import './databaseoperations.dart';
+import './scoutingoperations.dart';
 
 class TeleopScouter extends StatefulWidget {
   static const String route = '/TeleopScouter';
@@ -23,7 +23,7 @@ class TeleopScouter extends StatefulWidget {
 class _TeleopScouterState extends State<TeleopScouter> {
   String _teamNumber;
   String _matchNumber;
-  DatabaseOperations db = new DatabaseOperations();
+  ScoutingOperations db = new ScoutingOperations();
   Counter _bottomPort = Counter('Bottom Port');
   Counter _outerPort = Counter('Outer Port');
   Counter _innerPort = Counter('Inner Port');

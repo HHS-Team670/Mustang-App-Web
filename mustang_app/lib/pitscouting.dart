@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mustang_app/postscouter.dart';
 
 import './header.dart';
-import './databaseoperations.dart';
+import './scoutingoperations.dart';
 import './counter.dart';
 
 class PitScouter extends StatefulWidget {
@@ -18,7 +18,7 @@ class PitScouter extends StatefulWidget {
 }
 
 class _PitScouterState extends State<PitScouter> {
-  DatabaseOperations db = new DatabaseOperations();
+  ScoutingOperations db = new ScoutingOperations();
   String _teamNumber;
   TextEditingController _notes = new TextEditingController();
   bool _drivebaseTall = false,

@@ -1,6 +1,7 @@
-import 'datareader.dart';
+import 'teamanalyzer.dart';
 
 class Analyzer {
+  bool _initialized = false;
   String _teamNum;
   double _noDGames = 0,
       _lightDGames = 0,
@@ -38,16 +39,19 @@ class Analyzer {
 
   Analyzer(String teamNum) {
     _teamNum = teamNum;
+    init().then((_) => _initialized = true);
+  }
 
+  Future<void> init() async {
     Map<String, double> noD =
-        DataReader.getTeamTargetAverages(_teamNum, "None");
+        await TeamAnalyzer.getTeamTargetAverages(_teamNum, "None");
     Map<String, double> lightD =
-        DataReader.getTeamTargetAverages(_teamNum, "Light");
+        await TeamAnalyzer.getTeamTargetAverages(_teamNum, "Light");
     Map<String, double> heavyD =
-        DataReader.getTeamTargetAverages(_teamNum, "Heavy");
+        await TeamAnalyzer.getTeamTargetAverages(_teamNum, "Heavy");
 
     //initialize all vars
-    _noDGames = DataReader.getTotalNoDGames(_teamNum, "None");
+    _noDGames = await TeamAnalyzer.getTotalNoDGames(_teamNum, "None");
     _noDPts = noD["Tele Balls [Low]"] +
         noD["Tele Balls [1]"] +
         noD["Tele Balls [2/3]"] +
@@ -55,7 +59,7 @@ class Analyzer {
         noD["Tele Balls [5]"] +
         noD["Tele Balls [6]"];
 
-    _lightDGames = DataReader.getTotalNoDGames(_teamNum, "Light");
+    _lightDGames = await TeamAnalyzer.getTotalNoDGames(_teamNum, "Light");
     _lightDPts = lightD["Tele Balls [Low]"] +
         lightD["Tele Balls [1]"] +
         lightD["Tele Balls [2/3]"] +
@@ -63,7 +67,7 @@ class Analyzer {
         lightD["Tele Balls [5]"] +
         lightD["Tele Balls [6]"];
 
-    _heavyDGames = DataReader.getTotalNoDGames(_teamNum, "Heavy");
+    _heavyDGames = await TeamAnalyzer.getTotalNoDGames(_teamNum, "Heavy");
     _heavyDPts = heavyD["Tele Balls [Low]"] +
         heavyD["Tele Balls [1]"] +
         heavyD["Tele Balls [2/3]"] +
