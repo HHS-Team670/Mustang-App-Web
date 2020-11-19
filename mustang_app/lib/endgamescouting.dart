@@ -43,7 +43,8 @@ class _EndgameScouterState extends State<EndgameScouter> {
           context,
           'Endgame',
         ),
-        body: ListView(
+        body: SingleChildScrollView(
+            child: Column(
           children: <Widget>[
             Container(
               padding:
@@ -132,6 +133,6 @@ class _EndgameScouterState extends State<EndgameScouter> {
                   )),
             )
           ],
-        ));
+        )));
   }
 }

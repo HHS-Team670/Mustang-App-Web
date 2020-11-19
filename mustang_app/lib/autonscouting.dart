@@ -10,8 +10,6 @@ class AutonScouter extends StatefulWidget {
   String _teamNumber, _matchNumber;
 
   AutonScouter({String teamNumber, String matchNumber}) {
-    print("Auton: " + teamNumber + " " + matchNumber);
-
     _teamNumber = teamNumber;
     _matchNumber = matchNumber;
   }

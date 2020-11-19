@@ -39,7 +39,8 @@ class _MatchEndScouterState extends State<MatchEndScouter> {
           context,
           'Match End',
         ),
-        body: ListView(
+        body: SingleChildScrollView(
+            child: Column(
           children: <Widget>[
             Container(
               padding:
@@ -100,6 +101,6 @@ class _MatchEndScouterState extends State<MatchEndScouter> {
                   )),
             )
           ],
-        ));
+        )));
   }
 }
