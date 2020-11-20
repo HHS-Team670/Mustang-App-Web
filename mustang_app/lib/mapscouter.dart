@@ -36,7 +36,6 @@ class _MapScouterState extends State<MapScouter> {
       TeamDataAnalyzer.teamAverages[_teamNumber].forEach((key, value) {
         String val = value.toString();
         val = val.substring(0, 3);
-        print(val);
         double x = 0, y = 0, shift = 0, textSize = 15;
         Color fillColor = Colors.black;
         bool isPoint = true;
