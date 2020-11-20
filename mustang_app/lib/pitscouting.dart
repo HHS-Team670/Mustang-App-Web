@@ -7,7 +7,7 @@ class PitScouter extends StatefulWidget {
   static const String route = '/PitScouter';
   static String _teamNumber;
 
-  PitScouter(teamNumber) {
+  PitScouter({String teamNumber}) {
     _teamNumber = teamNumber;
   }
 

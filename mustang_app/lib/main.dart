@@ -12,6 +12,7 @@ import 'endgamescouting.dart';
 import 'postscouter.dart';
 import 'matchendscouting.dart';
 import 'orientation_helpers.dart';
+import 'pitscouting.dart';
 
 void main() => runApp(MyApp());
 
@@ -89,6 +90,11 @@ class MyApp extends StatelessWidget {
     } else if (settings.name == TeamInfoDisplay.route) {
       return MaterialPageRoute(
         builder: (context) => TeamInfoDisplay(teamNumber: args['teamNumber']),
+        settings: rotationSettings(settings, ScreenOrientation.portraitOnly),
+      );
+    } else if (settings.name == PitScouter.route) {
+      return MaterialPageRoute(
+        builder: (context) => PitScouter(teamNumber: args['teamNumber']),
         settings: rotationSettings(settings, ScreenOrientation.portraitOnly),
       );
     }

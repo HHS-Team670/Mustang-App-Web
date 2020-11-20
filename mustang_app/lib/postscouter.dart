@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mustang_app/bottomnavbar.dart';
 
 import 'header.dart';
 import 'calendar.dart';
@@ -10,6 +11,7 @@ class PostScouter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: BottomNavBar(context),
         appBar: Header(
           context,
           'Finished!',
@@ -39,6 +41,7 @@ class PostScouter extends StatelessWidget {
                     EdgeInsets.only(top: 7.5, left: 15, right: 15, bottom: 10),
                 child: RaisedButton(
                   onPressed: () {
+                    BottomNavBar.setSelected(Calendar.route);
                     Navigator.of(context).pushNamed(Calendar.route);
                   },
                   child: Text(
