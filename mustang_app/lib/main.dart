@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mustang_app/teaminfodisplay.dart';
 import 'mapscouter.dart';
-import 'mapscouterkey.dart';
 import 'calendar.dart';
 import 'scouter.dart';
 import 'search.dart';
@@ -75,11 +74,6 @@ class MyApp extends StatelessWidget {
         builder: (context) => MapScouter(
           teamNumber: args['teamNumber'],
         ),
-        settings: rotationSettings(settings, ScreenOrientation.landscapeOnly),
-      );
-    } else if (settings.name == MapScouterKey.route) {
-      return MaterialPageRoute(
-        builder: (context) => MapScouterKey(),
         settings: rotationSettings(settings, ScreenOrientation.landscapeOnly),
       );
     } else if (settings.name == SketchPage.route) {

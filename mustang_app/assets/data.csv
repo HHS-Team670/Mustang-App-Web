@@ -449,3 +449,7 @@ matchNumber,teamNumber,startingLocation,autoBallsLow,autoBalls1,autoBalls23,auto
 76,5197,Inline with Goal,0,0,0,0,0,0,None,Middle,0,0,0,0,0,0,0,0,None,None
 75,7856,Left of Goal,0,0,0,0,0,0,None,Goal Side Middle,0,0,2,0,0,0,0,0,None,None
 76,94,Inline with Goal,0,0,0,0,0,0,None,Goal Zone,0,0,0,0,0,0,0,0,None,None
+76,670,Inline with Goal,0,0,7,0,0,0,None,Goal Zone,0,0,7,0,0,3,0,0,None,Heavy
+77,670,Inline with Goal,0,0,1,0,3,0,None,Goal Zone,0,0,2,0,0,5,0,0,None,Light
+77,0,Inline with Goal,0,0,7,0,0,0,None,Goal Zone,0,0,7,0,0,3,0,0,None,Heavy
+76,0,Inline with Goal,0,0,1,0,3,0,None,Goal Zone,0,0,2,0,0,5,0,0,None,Light

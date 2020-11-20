@@ -116,7 +116,9 @@ class TeamDataAnalyzer {
   }
 
   static Map<String, double> _calcTeamAverages(String teamNumber, hasAnalysis) {
-    List<DocumentSnapshot> matches = getMatchDocs(teamNumber);
+    List<DocumentSnapshot> matches = getMatchDocs(teamNumber)
+        .where((element) => element.data['hasAnalysis'])
+        .toList();
 
     Map<String, int> totals = {};
     keys.forEach((key) {
