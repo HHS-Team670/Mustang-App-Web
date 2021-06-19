@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>929165800752-qaainojmk89tenlukd9i692g67i8cljr.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.929165800752-qaainojmk89tenlukd9i692g67i8cljr</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBOFGI8Il14oRUqCPnPmIWbOuHXRVIdJUk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>929165800752</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.mustangApp</string>
+	<key>PROJECT_ID</key>
+	<string>mustangapp-b1398</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mustangapp-b1398.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:929165800752:ios:e8ce4ad00e46ce227784f5</string>
+	<key>DATABASE_URL</key>
+	<string>https://mustangapp-b1398.firebaseio.com</string>
+</dict>
+</plist>
